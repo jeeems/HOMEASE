@@ -6,6 +6,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::view('/no-internet', 'no-internet');
+
 Route::get('/login', function () {
     return view('auth.login'); // Replace with your actual login view
 })->name('login');
