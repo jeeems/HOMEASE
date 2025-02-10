@@ -270,7 +270,8 @@
                             <i class="fas fa-star w-6 sm:w-8 md:w-10 h-6 sm:h-8 md:h-10 text-yellow-300"></i>
                             <i class="fas fa-star w-6 sm:w-8 md:w-10 h-6 sm:h-8 md:h-10 text-yellow-300"></i>
                         </div>
-                        <p class="mt-2 text-xs sm:text-sm italic text-shadow-sm">"Booking took just minutes, and the
+                        <p class="text-gray-700 mt-2 text-xs sm:text-sm italic text-shadow-sm">"Booking took just
+                            minutes, and the
                             results
                             were amazing! My house went from chaos to spotless in one visit."</p>
                         <p class="mt-1 sm:mt-2 text-xs font-semibold text-shadow-sm">- Kenn, Busy Financial Analyst</p>
