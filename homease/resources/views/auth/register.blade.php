@@ -1,62 +1,70 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container d-flex justify-content-center align-items-center" style="height: 100vh; overflow: hidden;">
+    <div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
         <div class="register-card p-4 shadow-lg">
             <h3 class="text-center mb-3">Sign Up</h3>
 
-            <!-- Role Selection with Animated Underline -->
-            <div class="role-selection d-flex justify-content-center position-relative mb-3">
+            <!-- Role Selection -->
+            <div class="role-selection d-flex flex-wrap justify-content-center position-relative mb-3">
                 <div class="role-option active" data-role="client">Client</div>
                 <div class="role-option" data-role="worker">Worker</div>
                 <div class="underline"></div>
             </div>
 
-            <form method="POST" action="{{ route('register') }}" onsubmit="return confirmSubmission()">
+            <form method="POST" action="{{ route('register') }}">
                 @csrf
                 <input type="hidden" name="role" id="selectedRole" value="client">
 
                 <!-- Step 1 -->
                 <div id="step1">
-                    <div class="form-group mb-2">
-                        <label for="first_name">First Name</label>
-                        <input type="text" name="first_name" class="form-control" required>
-                    </div>
-                    <div class="form-group mb-2">
-                        <label for="middle_name">Middle Name (Optional)</label>
-                        <input type="text" name="middle_name" class="form-control">
-                    </div>
-                    <div class="form-group mb-2">
-                        <label for="last_name">Last Name</label>
-                        <input type="text" name="last_name" class="form-control" required>
-                    </div>
-                    <div class="form-group mb-2">
-                        <label>Birthdate:</label>
-                        <div class="d-flex">
-                            <select class="form-control" id="birth_month" name="birth_month" required>
-                                <option value="">Month</option>
-                                @for ($m = 1; $m <= 12; $m++)
-                                    <option value="{{ $m }}">{{ date('F', mktime(0, 0, 0, $m, 1)) }}</option>
-                                @endfor
-                            </select>
-
-                            <select class="form-control mx-2" id="birth_day" name="birth_day" required>
-                                <option value="">Day</option>
-                                @for ($d = 1; $d <= 31; $d++)
-                                    <option value="{{ $d }}">{{ $d }}</option>
-                                @endfor
-                            </select>
-
-                            <select class="form-control" id="birth_year" name="birth_year" required>
-                                <option value="">Year</option>
-                                @for ($y = date('Y') - 18; $y >= 1900; $y--)
-                                    <option value="{{ $y }}">{{ $y }}</option>
-                                @endfor
-                            </select>
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <label for="first_name">First Name</label>
+                            <input type="text" name="first_name" class="form-control" required>
                         </div>
-                        <small id="ageError" class="text-danger" style="display: none;">You must be at least 18 years
-                            old.</small>
+                        <div class="col-md-6 mb-2">
+                            <label for="middle_name">Middle Name (Optional)</label>
+                            <input type="text" name="middle_name" class="form-control">
+                        </div>
+                        <div class="col-md-12 mb-2">
+                            <label for="last_name">Last Name</label>
+                            <input type="text" name="last_name" class="form-control" required>
+                        </div>
                     </div>
+
+                    <div class="form-group mb-2">
+                        <label class="d-block">Birthdate:</label>
+                        <div class="row g-2">
+                            <div class="col-auto flex-grow-1">
+                                <select class="form-control" name="birth_month" required>
+                                    <option value="">Month</option>
+                                    @for ($m = 1; $m <= 12; $m++)
+                                        <option value="{{ $m }}">{{ date('F', mktime(0, 0, 0, $m, 1)) }}</option>
+                                    @endfor
+                                </select>
+                            </div>
+                            <div class="col-auto flex-grow-1">
+                                <select class="form-control" name="birth_day" required>
+                                    <option value="">Day</option>
+                                    @for ($d = 1; $d <= 31; $d++)
+                                        <option value="{{ $d }}">{{ $d }}</option>
+                                    @endfor
+                                </select>
+                            </div>
+                            <div class="col-auto flex-grow-1">
+                                <select class="form-control" name="birth_year" required>
+                                    <option value="">Year</option>
+                                    @for ($y = date('Y') - 18; $y >= 1900; $y--)
+                                        <option value="{{ $y }}">{{ $y }}</option>
+                                    @endfor
+                                </select>
+                            </div>
+                        </div>
+                        <small id="ageError" class="text-danger d-none">You must be at least 18 years old.</small>
+                    </div>
+
+
                     <div class="form-group mb-2">
                         <label for="gender">Gender</label>
                         <select name="gender" class="form-control" required>
@@ -65,14 +73,17 @@
                             <option value="female">Female</option>
                         </select>
                     </div>
+
                     <div class="form-group mb-2">
                         <label for="email">Email Address</label>
                         <input type="email" name="email" class="form-control" required>
                     </div>
+
                     <div class="form-group mb-2">
                         <label for="phone">Phone Number</label>
                         <input type="text" name="phone" class="form-control" required>
                     </div>
+
                     <button type="button" class="btn btn-primary w-100" id="nextStep" disabled>Next</button>
                 </div>
 
@@ -119,31 +130,34 @@
             background: url("{{ asset('assets/homepage/covers/HOMEASE COVER.png') }}") no-repeat center center fixed;
             background-size: cover;
             backdrop-filter: blur(8px);
-            overflow: hidden;
         }
 
         .register-card {
-            position: relative;
-            top: -10vh;
-            width: 500px;
+            width: 100%;
+            max-width: 500px;
             background: white;
             border-radius: 15px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(10px);
-            padding: 25px;
+            padding: 20px;
             border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        @media (max-width: 576px) {
+            .register-card {
+                max-width: 90%;
+                padding: 15px;
+            }
         }
 
         .role-selection {
             display: flex;
-            gap: 20px;
-            position: relative;
+            gap: 15px;
             cursor: pointer;
             font-weight: bold;
         }
 
         .role-option {
-            padding: 10px;
+            padding: 8px;
             cursor: pointer;
         }
 
@@ -152,23 +166,18 @@
             bottom: 0;
             height: 3px;
             width: 50px;
-            /* Initial width */
             background: linear-gradient(to right, transparent, #007bff, transparent);
             border-radius: 50px;
             transition: left 0.3s ease-in-out, width 0.3s ease-in-out;
         }
-
 
         .role-option.active {
             color: #007bff;
         }
     </style>
 
-    <script>
-        function confirmSubmission() {
-            return confirm("Are you sure you want to proceed with registration?");
-        }
 
+    <script>
         document.addEventListener("DOMContentLoaded", function() {
             const step1 = document.getElementById("step1");
             const step2 = document.getElementById("step2");
@@ -183,9 +192,12 @@
             const passwordInput = document.querySelector("input[name='password']");
             const confirmPasswordInput = document.querySelector("input[name='password_confirmation']");
             const passwordError = document.createElement("small");
+            const form = document.querySelector("form");
 
             passwordError.classList.add("text-danger");
             confirmPasswordInput.parentNode.appendChild(passwordError);
+
+            let isSubmitting = false;
 
             // Function to validate email format
             function isValidEmail(email) {
@@ -254,36 +266,42 @@
             nextStepBtn.addEventListener("click", function() {
                 step1.style.display = "none";
                 step2.style.display = "block";
-                backStepBtn.style.display = "block";
+                checkStep2Inputs();
             });
 
             // Navigate back to Step 1
             backStepBtn.addEventListener("click", function() {
-                step1.style.display = "block";
                 step2.style.display = "none";
-                backStepBtn.style.display = "none";
+                step1.style.display = "block";
             });
 
-            // Refresh Warning
-            window.addEventListener("beforeunload", function(event) {
-                event.preventDefault();
-                event.returnValue = "Are you sure you want to leave? Your progress may be lost.";
+            // Before unload warning
+            function beforeUnloadHandler(event) {
+                if (!isSubmitting) {
+                    event.preventDefault();
+                    event.returnValue = "Are you sure you want to leave? Your progress may be lost.";
+                }
+            }
+
+            window.addEventListener("beforeunload", beforeUnloadHandler);
+
+            // Confirm submission and prevent "leave" warning when proceeding
+            form.addEventListener("submit", function(event) {
+                if (!confirm("Are you sure you want to proceed with registration?")) {
+                    event.preventDefault();
+                    return;
+                }
+
+                isSubmitting = true;
+                window.removeEventListener("beforeunload", beforeUnloadHandler);
             });
 
-            // Password confirmation validation
-            passwordInput.addEventListener("input", passwordsMatch);
-            confirmPasswordInput.addEventListener("input", function() {
-                passwordsMatch();
-                checkStep2Inputs();
-            });
-
-            // Restore inputs and role on page load
-            restoreInputs(step1Inputs);
-            restoreInputs(step2Inputs);
+            // Restore inputs on load
+            restoreInputs([...step1Inputs, ...step2Inputs]);
             restoreRoleSelection();
             checkStep1Inputs();
-            checkStep2Inputs();
         });
+
 
 
         document.addEventListener("DOMContentLoaded", function() {

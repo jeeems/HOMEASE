@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
+    <div class="container d-flex justify-content-center align-items-center vh-100">
         <div class="login-card p-4 shadow-lg">
             <h3 class="text-center mb-3">Login</h3>
 
@@ -46,20 +46,18 @@
             background: url("{{ asset('assets/homepage/covers/HOMEASE COVER.png') }}") no-repeat center center fixed;
             background-size: cover;
             backdrop-filter: blur(8px);
-            overflow: hidden;
         }
 
         /* Glass Morphic Login Card */
         .login-card {
             position: relative;
             top: -15vh;
-            width: 400px;
+            width: 100%;
+            max-width: 400px;
             background: white;
-            /* Transparent effect */
             border-radius: 15px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(10px);
-            /* Frosted glass effect */
+            /* backdrop-filter: blur(15px); */
             padding: 25px;
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
@@ -67,6 +65,7 @@
         /* Role Selection Styles */
         .role-selection {
             display: flex;
+            justify-content: center;
             gap: 40px;
             font-size: 18px;
             font-weight: bold;
@@ -77,21 +76,33 @@
 
         .role-option {
             padding-bottom: 5px;
-            position: relative;
             transition: color 0.3s ease-in-out;
+        }
+
+        .role-option.active {
+            color: #007bff;
         }
 
         .underline {
             position: absolute;
-            bottom: 0;
+            bottom: -2px;
             height: 2px;
-            /* Keep it thin */
             background: linear-gradient(to right, transparent, #007bff, transparent);
-            /* Makes endpoints thinner */
-            border-radius: 50%;
-            /* Adds sharp effect to edges */
             transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
             left: 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .login-card {
+                width: 90%;
+                padding: 20px;
+            }
+
+            .role-selection {
+                gap: 20px;
+                font-size: 16px;
+            }
         }
     </style>
 
@@ -104,27 +115,17 @@
             function updateUnderline(selectedOption) {
                 const rect = selectedOption.getBoundingClientRect();
                 const parentRect = selectedOption.parentNode.getBoundingClientRect();
-
-                underline.style.width = `${rect.width + 10}px`; // Extend underline width
-                underline.style.transform =
-                    `translateX(${rect.left - parentRect.left}px)`; // Move underline under selected text
+                underline.style.width = `${rect.width}px`;
+                underline.style.transform = `translateX(${rect.left - parentRect.left}px)`;
             }
 
-            // Set initial position
             updateUnderline(document.querySelector(".role-option.active"));
 
             roleOptions.forEach(option => {
                 option.addEventListener("click", function() {
-                    // Remove active class from all
                     roleOptions.forEach(opt => opt.classList.remove("active"));
-
-                    // Add active class to clicked option
                     this.classList.add("active");
-
-                    // Update hidden input value
                     roleInput.value = this.getAttribute("data-role");
-
-                    // Move underline
                     updateUnderline(this);
                 });
             });
