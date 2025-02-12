@@ -9,6 +9,259 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/lucide@latest"></script>
+</head>
+
+<body class="bg-white">
+    <!-- Skeleton Loader -->
+    <div id="skeleton-loader" class="flex justify-center items-center h-screen">
+        <div class="w-3/4 sm:w-1/2 bg-gray-300 animate-pulse rounded-md p-6">
+            <div class="h-6 bg-gray-400 rounded w-1/2 mb-4"></div>
+            <div class="h-4 bg-gray-400 rounded w-3/4 mb-2"></div>
+            <div class="h-4 bg-gray-400 rounded w-full mb-2"></div>
+            <div class="h-4 bg-gray-400 rounded w-5/6 mb-2"></div>
+            <div class="h-10 bg-gray-400 rounded w-1/3"></div>
+        </div>
+    </div>
+
+    <!-- Main Content (Initially Hidden) -->
+    <div id="main-content" class="hidden">
+        <!-- Navbar -->
+        <nav id="navbar" class="navbar fixed top-0 left-0 w-full z-50 text-blue-600 p-4 transition-all duration-300">
+            <div class="container mx-auto flex justify-between items-center">
+                <div>
+                    <a href="/">
+                        <img src="assets/logo-and-icon/LOGO.png" alt="HomEase Logo" class="h-10 w-auto">
+                    </a>
+                </div>
+                <ul class="hidden md:flex space-x-8 text-lg">
+                    <li><a href="/" class="hover:text-blue-400 transition">Home</a></li>
+                    <li><a href="#services" class="hover:text-blue-400 transition">Services</a></li>
+                    <li><a href="{{ route('pricing') }}" class="hover:text-blue-400 transition">Pricing</a></li>
+                    <li><a href="#" class="hover:text-blue-400 transition">About Us</a></li>
+                </ul>
+                <div class="flex items-center space-x-4">
+                    <a href="{{ route('login') }}"
+                        class="login-btn bg-blue-600 text-white px-4 py-2 rounded-md font-semibold">
+                        <span>Login</span>
+                    </a>
+                    <a href="{{ route('register') }}"
+                        class="register-btn border bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold shadow-md">
+                        <span>Register</span>
+                    </a>
+                    <button id="mobile-menu-button" class="text-2xl md:hidden transition-all duration-300">
+                        &#9776;
+                    </button>
+                </div>
+            </div>
+
+            <div id="mobile-menu" class="md:hidden hidden bg-white text-blue-600 p-4 space-y-4">
+                <ul class="text-lg space-y-4">
+                    <li><a href="{{ url('/') }}" class="hover:text-blue-400 transition">Home</a></li>
+                    <li><a href="#services" class="hover:text-blue-400 transition">Services</a></li>
+                    <li><a href="{{ route('pricing') }}" class="hover:text-blue-400 transition">Pricing</a></li>
+                    <li><a href="#" class="hover:text-blue-400 transition">About Us</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main Page Content -->
+        <div class="content-wrapper">
+            <!-- Cover Section -->
+            <div class="relative flex justify-center mt-20 mb-2 px-4 sm:px-16">
+                <div
+                    class="w-full sm:w-[90%] md:w-[80%] lg:w-[70%] max-w-[1313px] h-[300px] sm:h-[400px] md:h-[461px] rounded-2xl overflow-hidden relative">
+                    <img src="{{ asset('assets/homepage/covers/HOMEASE COVER.png') }}" alt="Homease Cover"
+                        class="w-full h-full object-cover object-center sm:object-right md:object-center">
+
+                    <!-- Gradient Overlay -->
+                    <div
+                        class="absolute top-0 right-0 w-full md:w-1/2 h-full bg-gradient-to-l from-black/70 to-transparent rounded-2xl">
+                    </div>
+
+                    <!-- Testimonial -->
+                    <div class="absolute top-4 right-4 text-white sm:text-black text-right max-w-xs z-10">
+                        <div class="flex justify-end space-x-1">
+                            <!-- FontAwesome Stars with brighter yellow and larger size -->
+                            <i class="fas fa-star w-6 sm:w-8 md:w-10 h-6 sm:h-8 md:h-10 text-yellow-300"></i>
+                            <i class="fas fa-star w-6 sm:w-8 md:w-10 h-6 sm:h-8 md:h-10 text-yellow-300"></i>
+                            <i class="fas fa-star w-6 sm:w-8 md:w-10 h-6 sm:h-8 md:h-10 text-yellow-300"></i>
+                            <i class="fas fa-star w-6 sm:w-8 md:w-10 h-6 sm:h-8 md:h-10 text-yellow-300"></i>
+                            <i class="fas fa-star w-6 sm:w-8 md:w-10 h-6 sm:h-8 md:h-10 text-yellow-300"></i>
+                        </div>
+                        <p class="text-gray-700 mt-2 text-xs sm:text-sm italic text-shadow-sm">"Booking took just
+                            minutes, and the
+                            results
+                            were amazing! My house went from chaos to spotless in one visit."</p>
+                        <p class="mt-1 sm:mt-2 text-xs font-semibold text-shadow-sm">- Kenn, Busy Financial Analyst</p>
+                    </div>
+
+                    <!-- Call to Action -->
+                    <div
+                        class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm p-2 sm:p-4 rounded-lg shadow-lg flex items-center space-x-4">
+                        <button
+                            class="login-btn bg-blue-600 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-md font-semibold text-sm sm:text-base">
+                            <span>Book Now!</span>
+                        </button>
+                        <span class="as-low text-gray-700 font-semibold text-xs sm:text-base">As low as ₱300!</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tagline Section -->
+            <div class="text-center mt-8 mb-8 px-4 sm:px-0">
+                <h2 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-gray-900">YOUR HOME, OUR EXPERTISE.</h2>
+                <div
+                    class="relative inline-block mt-2 sm:mt-2 transform -rotate-2 sm:left-1/2 sm:-translate-x-1/2 lg:left-96">
+                    <span class="absolute -inset-1 bg-blue-300 opacity-50 rounded-lg"></span>
+                    <p class="relative text-base sm:text-lg font-semibold text-gray-800">
+                        Book as fast as 10 mins!
+                    </p>
+                </div>
+            </div>
+
+            <!-- Services Section -->
+            <section id="services" class="relative mt-16 py-16 bg-blue-900">
+                <div class="relative container mx-auto px-6 md:px-12">
+                    <h2 class="text-4xl font-bold text-white text-center mb-16">OUR SERVICES</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- Service Cards -->
+                        <div class="service-card bg-white rounded-lg overflow-hidden shadow-lg">
+                            <img src="{{ asset('assets/homepage/service_banners/home-cleaning.png') }}"
+                                alt="Home Cleaning" class="w-full h-40 object-cover rounded-t-lg">
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mt-2">Home Cleaning</h3>
+                                <p class="text-gray-600 mt-2">Discover the joy of coming home to a spotless,
+                                    fresh-smelling haven. Our professional home cleaning service is designed to give you
+                                    more time for what matters most while we take care of the rest.</p>
+                                <div class="flex items-center mt-2">
+                                    <p class="font-bold text-blue-600">Starts at ₱600</p>
+                                    <p class="text-gray-400 text-sm ml-2">/ session</p>
+                                </div>
+                                <div class="mt-4 flex space-x-4">
+                                    <button class="bg-gray-200 px-4 py-2 rounded-md">Check Reviews</button>
+                                    <button class="bg-blue-600 text-white px-4 py-2 rounded-md">Book Now</button>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="service-card bg-white rounded-lg overflow-hidden shadow-lg">
+                            <img src="{{ asset('assets/homepage/service_banners/daycare.png') }}" alt="Daycare"
+                                class="w-full h-40 object-cover rounded-t-lg">
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mt-2">Daycare</h3>
+                                <p class="text-gray-600 mt-2">Give your children, disabled adults, and elderly the
+                                    attention and care they deserve with our professional daycare services. We're here
+                                    to provide a safe, fun, and enriching environment when you can't be there.</p>
+                                <div class="flex items-center mt-2">
+                                    <p class="font-bold text-blue-600">Starts at ₱300</p>
+                                    <p class="text-gray-400 text-sm ml-2">/ hour</p>
+                                </div>
+                                <div class="mt-4 flex space-x-4">
+                                    <button class="bg-gray-200 px-4 py-2 rounded-md">Check Reviews</button>
+                                    <button class="bg-blue-600 text-white px-4 py-2 rounded-md">Book Now</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="service-card bg-white rounded-lg overflow-hidden shadow-lg">
+                            <img src="{{ asset('assets/homepage/service_banners/carpentry.png') }}" alt="Carpentry"
+                                class="w-full h-40 object-cover rounded-t-lg">
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mt-2">Carpentry</h3>
+                                <p class="text-gray-600 mt-2">Don't let those nagging home repairs bring you down. Our
+                                    skilled technicians are ready to tackle any issue, big or small, to keep your home
+                                    running smoothly and efficiently.
+                                </p>
+                                <div class="flex items-center mt-2">
+                                    <p class="font-bold text-blue-600">Starts at ₱500</p>
+                                    <p class="text-gray-400 text-sm ml-2">/ session</p>
+                                </div>
+                                <div class="mt-4 flex space-x-4">
+                                    <button class="bg-gray-200 px-4 py-2 rounded-md">Check Reviews</button>
+                                    <button class="bg-blue-600 text-white px-4 py-2 rounded-md">Book Now</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="service-card bg-white rounded-lg overflow-hidden shadow-lg">
+                            <img src="{{ asset('assets/homepage/service_banners/plumbing.png') }}" alt="Plumbing"
+                                class="w-full h-40 object-cover rounded-t-lg">
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mt-2">Plumbing</h3>
+                                <p class="text-gray-600 mt-2">Experience the peace of mind that comes with a perfectly
+                                    functioning home. Our professional plumbing service is here to swiftly handle leaks,
+                                    clogs, and installations, so you can have peace of mind</p>
+                                <div class="flex items-center mt-2">
+                                    <p class="font-bold text-blue-600">Starts at ₱500</p>
+                                    <p class="text-gray-400 text-sm ml-2">/ session</p>
+                                </div>
+                                <div class="mt-4 flex space-x-4">
+                                    <button class="bg-gray-200 px-4 py-2 rounded-md">Check Reviews</button>
+                                    <button class="bg-blue-600 text-white px-4 py-2 rounded-md">Book Now</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="service-card bg-white rounded-lg overflow-hidden shadow-lg">
+                            <img src="{{ asset('assets/homepage/service_banners/electrician.png') }}"
+                                alt="Electrician" class="w-full h-40 object-cover rounded-t-lg">
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mt-2">Electrician</h3>
+                                <p class="text-gray-600 mt-2">Feel the comfort of a well-lit, safely wired home. Our
+                                    expert electricians are ready to tackle everything from minor repairs to major
+                                    installations, ensuring your space stays bright and secure while you enjoy the
+                                    moments that matter most.</p>
+                                <div class="flex items-center mt-2">
+                                    <p class="font-bold text-blue-600">Starts at ₱500</p>
+                                    <p class="text-gray-400 text-sm ml-2">/ session</p>
+                                </div>
+                                <div class="mt-4 flex space-x-4">
+                                    <button class="bg-gray-200 px-4 py-2 rounded-md">Check Reviews</button>
+                                    <button class="bg-blue-600 text-white px-4 py-2 rounded-md">Book Now</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="bg-white py-12 mt-6">
+                <div class="container mx-auto px-6 md:px-12 flex flex-col items-center">
+                    <div class="flex flex-col md:flex-row justify-center items-center w-full max-w-4xl text-center">
+                        <!-- Left Column -->
+                        <div class="w-full md:w-2/5 flex flex-col items-center mb-6 md:mb-0">
+                            <h3 class="text-2xl font-semibold text-gray-800">NEED SOMETHING SPECIFIC?</h3>
+                            <div class="mt-2 bg-gray-300 text-gray-700 px-8 py-3 rounded-lg ">
+                                CALL US HERE | +(63) 912-345-6789
+                            </div>
+                        </div>
+
+                        <!-- Separator -->
+                        <div class="hidden md:block w-px bg-gray-400 h-20 mx-12"></div>
+
+                        <!-- Right Column -->
+                        <div class="w-full md:w-2/5 flex flex-col items-center">
+                            <h3 class="text-2xl font-semibold text-gray-800">WANT MORE DETAILS?</h3>
+                            <a href="{{ route('pricing') }}"
+                                class="mt-2 bg-blue-600 text-white px-8 py-3 rounded-lg shadow-md hover:bg-blue-700 transition">
+                                DETAILED PRICING
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Copyright -->
+                <div class="text-center text-gray-600 text-sm mt-8">
+                    <img src="{{ asset('assets/logo-and-icon/LOGO.png') }}" alt="Homease Logo"
+                        class="h-8 mx-auto mb-2">
+                    &copy; 2025 Homease. All rights reserved.
+                </div>
+            </footer>
+
+
+        </div>
+    </div>
 
     <style>
         * {
@@ -191,261 +444,6 @@
             }
         }
     </style>
-</head>
-
-<body class="bg-white">
-    <!-- Skeleton Loader -->
-    <div id="skeleton-loader" class="flex justify-center items-center h-screen">
-        <div class="w-3/4 sm:w-1/2 bg-gray-300 animate-pulse rounded-md p-6">
-            <div class="h-6 bg-gray-400 rounded w-1/2 mb-4"></div>
-            <div class="h-4 bg-gray-400 rounded w-3/4 mb-2"></div>
-            <div class="h-4 bg-gray-400 rounded w-full mb-2"></div>
-            <div class="h-4 bg-gray-400 rounded w-5/6 mb-2"></div>
-            <div class="h-10 bg-gray-400 rounded w-1/3"></div>
-        </div>
-    </div>
-
-    <!-- Main Content (Initially Hidden) -->
-    <div id="main-content" class="hidden">
-        <!-- Navbar -->
-        <nav id="navbar" class="navbar fixed top-0 left-0 w-full z-50 text-blue-600 p-4 transition-all duration-300">
-            <div class="container mx-auto flex justify-between items-center">
-                <div>
-                    <a href="/">
-                        <img src="assets/logo-and-icon/LOGO.png" alt="HomEase Logo" class="h-10 w-auto">
-                    </a>
-                </div>
-                <ul class="hidden md:flex space-x-8 text-lg">
-                    <li><a href="/" class="hover:text-blue-400 transition">Home</a></li>
-                    <li><a href="#services" class="hover:text-blue-400 transition">Services</a></li>
-                    <li><a href="#" class="hover:text-blue-400 transition">Pricing</a></li>
-                    <li><a href="#" class="hover:text-blue-400 transition">About Us</a></li>
-                </ul>
-                <div class="flex items-center space-x-4">
-                    <a href="{{ route('login') }}"
-                        class="login-btn bg-blue-600 text-white px-4 py-2 rounded-md font-semibold">
-                        <span>Login</span>
-                    </a>
-                    <a href="{{ route('register') }}"
-                        class="register-btn border bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold shadow-md">
-                        <span>Register</span>
-                    </a>
-                    <button id="mobile-menu-button" class="text-2xl md:hidden transition-all duration-300">
-                        &#9776;
-                    </button>
-                </div>
-            </div>
-
-            <div id="mobile-menu" class="md:hidden hidden bg-white text-blue-600 p-4 space-y-4">
-                <ul class="text-lg space-y-4">
-                    <li><a href="{{ url('/') }}" class="hover:text-blue-400 transition">Home</a></li>
-                    <li><a href="#services" class="hover:text-blue-400 transition">Services</a></li>
-                    <li><a href="#" class="hover:text-blue-400 transition">Pricing</a></li>
-                    <li><a href="#" class="hover:text-blue-400 transition">About Us</a></li>
-                </ul>
-            </div>
-        </nav>
-
-        <!-- Main Page Content -->
-        <div class="content-wrapper">
-            <!-- Cover Section -->
-            <div class="relative flex justify-center mt-20 mb-2 px-4 sm:px-16">
-                <div
-                    class="w-full sm:w-[90%] md:w-[80%] lg:w-[70%] max-w-[1313px] h-[300px] sm:h-[400px] md:h-[461px] rounded-2xl overflow-hidden relative">
-                    <img src="{{ asset('assets/homepage/covers/HOMEASE COVER.png') }}" alt="Homease Cover"
-                        class="w-full h-full object-cover object-center sm:object-right md:object-center">
-
-                    <!-- Gradient Overlay -->
-                    <div
-                        class="absolute top-0 right-0 w-full md:w-1/2 h-full bg-gradient-to-l from-black/70 to-transparent rounded-2xl">
-                    </div>
-
-                    <!-- Testimonial -->
-                    <div class="absolute top-4 right-4 text-white sm:text-black text-right max-w-xs z-10">
-                        <div class="flex justify-end space-x-1">
-                            <!-- FontAwesome Stars with brighter yellow and larger size -->
-                            <i class="fas fa-star w-6 sm:w-8 md:w-10 h-6 sm:h-8 md:h-10 text-yellow-300"></i>
-                            <i class="fas fa-star w-6 sm:w-8 md:w-10 h-6 sm:h-8 md:h-10 text-yellow-300"></i>
-                            <i class="fas fa-star w-6 sm:w-8 md:w-10 h-6 sm:h-8 md:h-10 text-yellow-300"></i>
-                            <i class="fas fa-star w-6 sm:w-8 md:w-10 h-6 sm:h-8 md:h-10 text-yellow-300"></i>
-                            <i class="fas fa-star w-6 sm:w-8 md:w-10 h-6 sm:h-8 md:h-10 text-yellow-300"></i>
-                        </div>
-                        <p class="text-gray-700 mt-2 text-xs sm:text-sm italic text-shadow-sm">"Booking took just
-                            minutes, and the
-                            results
-                            were amazing! My house went from chaos to spotless in one visit."</p>
-                        <p class="mt-1 sm:mt-2 text-xs font-semibold text-shadow-sm">- Kenn, Busy Financial Analyst</p>
-                    </div>
-
-                    <!-- Call to Action -->
-                    <div
-                        class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm p-2 sm:p-4 rounded-lg shadow-lg flex items-center space-x-4">
-                        <button
-                            class="login-btn bg-blue-600 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-md font-semibold text-sm sm:text-base">
-                            <span>Book Now!</span>
-                        </button>
-                        <span class="as-low text-gray-700 font-semibold text-xs sm:text-base">As low as ₱300!</span>
-                    </div>
-                </div>
-            </div>
-
-
-
-            <!-- Tagline Section -->
-            <div class="text-center mt-8 mb-8 px-4 sm:px-0">
-                <h2 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-gray-900">YOUR HOME, OUR EXPERTISE.</h2>
-                <div
-                    class="relative inline-block mt-2 sm:mt-2 transform -rotate-2 sm:left-1/2 sm:-translate-x-1/2 lg:left-96">
-                    <span class="absolute -inset-1 bg-blue-300 opacity-50 rounded-lg"></span>
-                    <p class="relative text-base sm:text-lg font-semibold text-gray-800">
-                        Book as fast as 10 mins!
-                    </p>
-                </div>
-            </div>
-
-            <!-- Services Section -->
-            <section id="services" class="relative mt-16 py-16 bg-blue-900">
-                <div class="relative container mx-auto px-6 md:px-12">
-                    <h2 class="text-4xl font-bold text-white text-center mb-16">OUR SERVICES</h2>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <!-- Service Cards -->
-                        <div class="service-card bg-white rounded-lg overflow-hidden shadow-lg">
-                            <img src="{{ asset('assets/homepage/service_banners/home-cleaning.png') }}"
-                                alt="Home Cleaning" class="w-full h-40 object-cover rounded-t-lg">
-                            <div class="p-6">
-                                <h3 class="text-xl font-semibold mt-2">Home Cleaning</h3>
-                                <p class="text-gray-600 mt-2">Discover the joy of coming home to a spotless,
-                                    fresh-smelling haven. Our professional home cleaning service is designed to give you
-                                    more time for what matters most while we take care of the rest.</p>
-                                <div class="flex items-center mt-2">
-                                    <p class="font-bold text-blue-600">Starts at ₱600</p>
-                                    <p class="text-gray-400 text-sm ml-2">/ session</p>
-                                </div>
-                                <div class="mt-4 flex space-x-4">
-                                    <button class="bg-gray-200 px-4 py-2 rounded-md">Check Reviews</button>
-                                    <button class="bg-blue-600 text-white px-4 py-2 rounded-md">Book Now</button>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="service-card bg-white rounded-lg overflow-hidden shadow-lg">
-                            <img src="{{ asset('assets/homepage/service_banners/daycare.png') }}" alt="Daycare"
-                                class="w-full h-40 object-cover rounded-t-lg">
-                            <div class="p-6">
-                                <h3 class="text-xl font-semibold mt-2">Daycare</h3>
-                                <p class="text-gray-600 mt-2">Give your children, disabled adults, and elderly the
-                                    attention and care they deserve with our professional daycare services. We're here
-                                    to provide a safe, fun, and enriching environment when you can't be there.</p>
-                                <div class="flex items-center mt-2">
-                                    <p class="font-bold text-blue-600">Starts at ₱300</p>
-                                    <p class="text-gray-400 text-sm ml-2">/ hour</p>
-                                </div>
-                                <div class="mt-4 flex space-x-4">
-                                    <button class="bg-gray-200 px-4 py-2 rounded-md">Check Reviews</button>
-                                    <button class="bg-blue-600 text-white px-4 py-2 rounded-md">Book Now</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="service-card bg-white rounded-lg overflow-hidden shadow-lg">
-                            <img src="{{ asset('assets/homepage/service_banners/carpentry.png') }}" alt="Carpentry"
-                                class="w-full h-40 object-cover rounded-t-lg">
-                            <div class="p-6">
-                                <h3 class="text-xl font-semibold mt-2">Carpentry</h3>
-                                <p class="text-gray-600 mt-2">Don't let those nagging home repairs bring you down. Our
-                                    skilled technicians are ready to tackle any issue, big or small, to keep your home
-                                    running smoothly and efficiently.
-                                </p>
-                                <div class="flex items-center mt-2">
-                                    <p class="font-bold text-blue-600">Starts at ₱500</p>
-                                    <p class="text-gray-400 text-sm ml-2">/ session</p>
-                                </div>
-                                <div class="mt-4 flex space-x-4">
-                                    <button class="bg-gray-200 px-4 py-2 rounded-md">Check Reviews</button>
-                                    <button class="bg-blue-600 text-white px-4 py-2 rounded-md">Book Now</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="service-card bg-white rounded-lg overflow-hidden shadow-lg">
-                            <img src="{{ asset('assets/homepage/service_banners/plumbing.png') }}" alt="Plumbing"
-                                class="w-full h-40 object-cover rounded-t-lg">
-                            <div class="p-6">
-                                <h3 class="text-xl font-semibold mt-2">Plumbing</h3>
-                                <p class="text-gray-600 mt-2">Experience the peace of mind that comes with a perfectly
-                                    functioning home. Our professional plumbing service is here to swiftly handle leaks,
-                                    clogs, and installations, so you can have peace of mind</p>
-                                <div class="flex items-center mt-2">
-                                    <p class="font-bold text-blue-600">Starts at ₱500</p>
-                                    <p class="text-gray-400 text-sm ml-2">/ session</p>
-                                </div>
-                                <div class="mt-4 flex space-x-4">
-                                    <button class="bg-gray-200 px-4 py-2 rounded-md">Check Reviews</button>
-                                    <button class="bg-blue-600 text-white px-4 py-2 rounded-md">Book Now</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="service-card bg-white rounded-lg overflow-hidden shadow-lg">
-                            <img src="{{ asset('assets/homepage/service_banners/electrician.png') }}"
-                                alt="Electrician" class="w-full h-40 object-cover rounded-t-lg">
-                            <div class="p-6">
-                                <h3 class="text-xl font-semibold mt-2">Electrician</h3>
-                                <p class="text-gray-600 mt-2">Feel the comfort of a well-lit, safely wired home. Our
-                                    expert electricians are ready to tackle everything from minor repairs to major
-                                    installations, ensuring your space stays bright and secure while you enjoy the
-                                    moments that matter most.</p>
-                                <div class="flex items-center mt-2">
-                                    <p class="font-bold text-blue-600">Starts at ₱500</p>
-                                    <p class="text-gray-400 text-sm ml-2">/ session</p>
-                                </div>
-                                <div class="mt-4 flex space-x-4">
-                                    <button class="bg-gray-200 px-4 py-2 rounded-md">Check Reviews</button>
-                                    <button class="bg-blue-600 text-white px-4 py-2 rounded-md">Book Now</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <footer class="bg-white py-12 mt-6">
-                <div class="container mx-auto px-6 md:px-12 flex flex-col items-center">
-                    <div class="flex flex-col md:flex-row justify-center items-center w-full max-w-4xl text-center">
-                        <!-- Left Column -->
-                        <div class="w-full md:w-2/5 flex flex-col items-center mb-6 md:mb-0">
-                            <h3 class="text-2xl font-semibold text-gray-800">NEED SOMETHING SPECIFIC?</h3>
-                            <div class="mt-2 bg-gray-300 text-gray-700 px-8 py-3 rounded-lg ">
-                                CALL US HERE | +(63) 912-345-6789
-                            </div>
-                        </div>
-
-                        <!-- Separator -->
-                        <div class="hidden md:block w-px bg-gray-400 h-20 mx-12"></div>
-
-                        <!-- Right Column -->
-                        <div class="w-full md:w-2/5 flex flex-col items-center">
-                            <h3 class="text-2xl font-semibold text-gray-800">WANT MORE DETAILS?</h3>
-                            <a href="#pricing"
-                                class="mt-2 bg-blue-600 text-white px-8 py-3 rounded-lg shadow-md hover:bg-blue-700 transition">
-                                DETAILED PRICING
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Copyright -->
-                <div class="text-center text-gray-600 text-sm mt-8">
-                    <img src="{{ asset('assets/logo-and-icon/LOGO.png') }}" alt="Homease Logo"
-                        class="h-8 mx-auto mb-2">
-                    &copy; 2025 Homease. All rights reserved.
-                </div>
-            </footer>
-
-
-        </div>
-    </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {

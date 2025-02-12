@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\PricingController;
 
 Auth::routes(['verify' => true]); // Enable email verification
 
@@ -24,3 +25,7 @@ Route::get('password/reset', function () {
 })->name('password.request');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/pricing', function () {
+    return view('homepage_resources.pricing');
+})->name('pricing');
