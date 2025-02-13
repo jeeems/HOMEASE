@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\PricingController;
+use App\Http\Controllers\Auth\RegisterController;
 
 Auth::routes(['verify' => true]); // Enable email verification
 
@@ -17,8 +17,11 @@ Route::get('/login', function () {
 })->name('login');
 
 Route::get('/register', function () {
-    return view('auth.register'); // Replace with your actual login view
-})->name('register');
+    return view('auth.register');
+})->name('register.form'); // Renamed to avoid conflict
+
+Route::post('/register', [RegisterController::class, 'register'])->name('register');
+
 
 Route::get('password/reset', function () {
     return view('auth.passwords.email'); // Create this view if it doesn't exist

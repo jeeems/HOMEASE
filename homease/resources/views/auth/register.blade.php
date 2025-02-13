@@ -122,6 +122,17 @@
                 <span>Already have an account?</span> <a href="{{ route('login') }}"
                     class="text-decoration-none">Login</a>
             </div>
+
+            <!-- Add this before the closing </div> of register-card -->
+            <div id="loadingOverlay" class="loading-overlay d-none">
+                <div class="loading-content">
+                    <div class="spinner-border text-primary mb-3" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <h5 class="text-white">Creating your account...</h5>
+                    <p class="text-white-50">Please wait while we process your registration.</p>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -173,6 +184,28 @@
 
         .role-option.active {
             color: #007bff;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loading-content {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .d-none {
+            display: none !important;
         }
     </style>
 
@@ -287,13 +320,63 @@
 
             // Confirm submission and prevent "leave" warning when proceeding
             form.addEventListener("submit", function(event) {
-                if (!confirm("Are you sure you want to proceed with registration?")) {
-                    event.preventDefault();
-                    return;
-                }
+                event.preventDefault();
 
-                isSubmitting = true;
-                window.removeEventListener("beforeunload", beforeUnloadHandler);
+                if (confirm("Are you sure you want to proceed with registration?")) {
+                    isSubmitting = true;
+                    window.removeEventListener("beforeunload", beforeUnloadHandler);
+
+                    // Show loading overlay
+                    document.getElementById('loadingOverlay').classList.remove('d-none');
+
+                    const formData = new FormData(form);
+
+                    fetch(form.action, {
+                            method: 'POST',
+                            body: formData,
+                            headers: {
+                                'Accept': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+                            },
+                            credentials: 'same-origin'
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Successfully registered
+                                window.location.href = data.redirect;
+                            } else if (data.errors) {
+                                // Hide loading overlay
+                                document.getElementById('loadingOverlay').classList.add('d-none');
+
+                                // Clear previous errors
+                                document.querySelectorAll('.is-invalid').forEach(el => {
+                                    el.classList.remove('is-invalid');
+                                });
+                                document.querySelectorAll('.invalid-feedback').forEach(el => {
+                                    el.remove();
+                                });
+
+                                // Show new errors
+                                Object.keys(data.errors).forEach(key => {
+                                    const input = form.querySelector(`[name="${key}"]`);
+                                    if (input) {
+                                        input.classList.add('is-invalid');
+                                        const errorDiv = document.createElement('div');
+                                        errorDiv.className = 'invalid-feedback';
+                                        errorDiv.textContent = data.errors[key][0];
+                                        input.parentNode.appendChild(errorDiv);
+                                    }
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            // Hide loading overlay
+                            document.getElementById('loadingOverlay').classList.add('d-none');
+                            console.error('Error:', error);
+                            alert('An error occurred during registration. Please try again.');
+                        });
+                }
             });
 
             // Restore inputs on load
@@ -301,8 +384,6 @@
             restoreRoleSelection();
             checkStep1Inputs();
         });
-
-
 
         document.addEventListener("DOMContentLoaded", function() {
             const roleOptions = document.querySelectorAll(".role-option");
