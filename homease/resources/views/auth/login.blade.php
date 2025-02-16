@@ -19,15 +19,27 @@
                 <div class="form-group mb-3">
                     <label for="email">Email</label>
                     <input type="email" name="email" id="email" class="form-control" required>
+
                 </div>
 
                 <div class="form-group mb-3">
                     <label for="password">Password</label>
                     <input type="password" name="password" id="password" class="form-control" required>
+                    @error('password')
+                        <div class="alert alert-danger mt-2">{{ $message }}</div>
+                    @enderror
+                    @error('email')
+                        <div class="alert alert-danger mt-2">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <button type="submit" class="btn btn-primary w-100">Login</button>
             </form>
+
+            @error('role')
+                <div class="alert alert-warning mt-3 text-center">{{ $message }}</div>
+            @enderror
+
 
             <div class="text-center mt-3">
                 <a href="{{ route('password.request') }}" class="text-decoration-none">Forgot Password?</a>

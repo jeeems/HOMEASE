@@ -85,4 +85,22 @@ class RegisterController extends Controller
             throw $e;
         }
     }
+
+    public function checkEmail(Request $request)
+    {
+        $exists = User::where('email', $request->value)->exists();
+        return response()->json([
+            'exists' => $exists,
+            'message' => $exists ? "Your email is already registered. <a href='" . route('login') . "'>Do you want to log in?</a>" : ""
+        ]);
+    }
+
+    public function checkPhone(Request $request)
+    {
+        $exists = User::where('phone', $request->value)->exists();
+        return response()->json([
+            'exists' => $exists,
+            'message' => $exists ? "This phone number is already registered." : ""
+        ]);
+    }
 }

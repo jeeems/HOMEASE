@@ -22,7 +22,7 @@
 
                         @if (session('resent'))
                             <div class="alert alert-success rounded-pill" role="alert">
-                                {{ __('A fresh verification link has been sent to your email address.') }}
+                                {{ __('A verification link has been sent to your email address.') }}
                             </div>
                         @endif
 
@@ -33,7 +33,7 @@
                         <form class="mb-4" method="POST" action="{{ route('verification.resend') }}">
                             @csrf
                             <button type="submit" class="btn btn-primary btn-lg rounded-pill px-5">
-                                {{ __('Resend Verification Email') }}
+                                {{ __('Click to send Verification Email') }}
                             </button>
                         </form>
 

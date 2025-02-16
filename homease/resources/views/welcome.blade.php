@@ -98,10 +98,10 @@
                     <!-- Call to Action -->
                     <div
                         class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm p-2 sm:p-4 rounded-lg shadow-lg flex items-center space-x-4">
-                        <button
+                        <a href="{{ route('login') }}"
                             class="login-btn bg-blue-600 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-md font-semibold text-sm sm:text-base">
                             <span>Book Now!</span>
-                        </button>
+                        </a>
                         <span class="as-low text-gray-700 font-semibold text-xs sm:text-base">As low as ₱300!</span>
                     </div>
                 </div>
@@ -139,7 +139,10 @@
                                 </div>
                                 <div class="mt-4 flex space-x-4">
                                     <button class="bg-gray-200 px-4 py-2 rounded-md">Check Reviews</button>
-                                    <button class="bg-blue-600 text-white px-4 py-2 rounded-md">Book Now</button>
+                                    <a href="{{ route('login') }}"
+                                        class="login-btn bg-blue-600 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-md font-semibold text-sm sm:text-base">
+                                        <span>Book Now</span>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -159,7 +162,10 @@
                                 </div>
                                 <div class="mt-4 flex space-x-4">
                                     <button class="bg-gray-200 px-4 py-2 rounded-md">Check Reviews</button>
-                                    <button class="bg-blue-600 text-white px-4 py-2 rounded-md">Book Now</button>
+                                    <a href="{{ route('login') }}"
+                                        class="login-btn bg-blue-600 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-md font-semibold text-sm sm:text-base">
+                                        <span>Book Now</span>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -179,7 +185,10 @@
                                 </div>
                                 <div class="mt-4 flex space-x-4">
                                     <button class="bg-gray-200 px-4 py-2 rounded-md">Check Reviews</button>
-                                    <button class="bg-blue-600 text-white px-4 py-2 rounded-md">Book Now</button>
+                                    <a href="{{ route('login') }}"
+                                        class="login-btn bg-blue-600 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-md font-semibold text-sm sm:text-base">
+                                        <span>Book Now</span>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -198,7 +207,10 @@
                                 </div>
                                 <div class="mt-4 flex space-x-4">
                                     <button class="bg-gray-200 px-4 py-2 rounded-md">Check Reviews</button>
-                                    <button class="bg-blue-600 text-white px-4 py-2 rounded-md">Book Now</button>
+                                    <a href="{{ route('login') }}"
+                                        class="login-btn bg-blue-600 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-md font-semibold text-sm sm:text-base">
+                                        <span>Book Now</span>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -218,7 +230,10 @@
                                 </div>
                                 <div class="mt-4 flex space-x-4">
                                     <button class="bg-gray-200 px-4 py-2 rounded-md">Check Reviews</button>
-                                    <button class="bg-blue-600 text-white px-4 py-2 rounded-md">Book Now</button>
+                                    <a href="{{ route('login') }}"
+                                        class="login-btn bg-blue-600 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-md font-semibold text-sm sm:text-base">
+                                        <span>Book Now</span>
+                                    </a>
                                 </div>
                             </div>
                         </div>

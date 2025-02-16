@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\VerifiesEmails;
 
 class VerificationController extends Controller
@@ -25,7 +26,14 @@ class VerificationController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected function redirectTo()
+    {
+        if (Auth::user()->role === 'worker') {  // Check if the user is a worker
+            return route('verification.second'); // Redirect to worker verification questions
+        }
+        return '/home'; // Default redirection for other users
+    }
+
 
     /**
      * Create a new controller instance.

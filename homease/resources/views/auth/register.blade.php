@@ -75,13 +75,15 @@
                     </div>
 
                     <div class="form-group mb-2">
-                        <label for="email">Email Address</label>
-                        <input type="email" name="email" class="form-control" required>
+                        <label for="email">Email</label>
+                        <input type="email" name="email" id="email" class="form-control" required>
+                        <span id="emailError" class="text-danger"></span>
                     </div>
 
                     <div class="form-group mb-2">
-                        <label for="phone">Phone Number</label>
-                        <input type="text" name="phone" class="form-control" required>
+                        <label for="phone">Phone</label>
+                        <input type="text" name="phone" id="phone" class="form-control" required>
+                        <span id="phoneError" class="text-danger"></span>
                     </div>
 
                     <button type="button" class="btn btn-primary w-100" id="nextStep" disabled>Next</button>
@@ -319,65 +321,65 @@
             window.addEventListener("beforeunload", beforeUnloadHandler);
 
             // Confirm submission and prevent "leave" warning when proceeding
-            form.addEventListener("submit", function(event) {
-                event.preventDefault();
+            // form.addEventListener("submit", function(event) {
+            //     event.preventDefault();
 
-                if (confirm("Are you sure you want to proceed with registration?")) {
-                    isSubmitting = true;
-                    window.removeEventListener("beforeunload", beforeUnloadHandler);
+            //     if (confirm("Are you sure you want to proceed with registration?")) {
+            //         isSubmitting = true;
+            //         window.removeEventListener("beforeunload", beforeUnloadHandler);
 
-                    // Show loading overlay
-                    document.getElementById('loadingOverlay').classList.remove('d-none');
+            //         // Show loading overlay
+            //         document.getElementById('loadingOverlay').classList.remove('d-none');
 
-                    const formData = new FormData(form);
+            //         const formData = new FormData(form);
 
-                    fetch(form.action, {
-                            method: 'POST',
-                            body: formData,
-                            headers: {
-                                'Accept': 'application/json',
-                                'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
-                            },
-                            credentials: 'same-origin'
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                // Successfully registered
-                                window.location.href = data.redirect;
-                            } else if (data.errors) {
-                                // Hide loading overlay
-                                document.getElementById('loadingOverlay').classList.add('d-none');
+            //         fetch(form.action, {
+            //                 method: 'POST',
+            //                 body: formData,
+            //                 headers: {
+            //                     'Accept': 'application/json',
+            //                     'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+            //                 },
+            //                 credentials: 'same-origin'
+            //             })
+            //             .then(response => response.json())
+            //             .then(data => {
+            //                 if (data.success) {
+            //                     // Successfully registered
+            //                     window.location.href = data.redirect;
+            //                 } else if (data.errors) {
+            //                     // Hide loading overlay
+            //                     document.getElementById('loadingOverlay').classList.add('d-none');
 
-                                // Clear previous errors
-                                document.querySelectorAll('.is-invalid').forEach(el => {
-                                    el.classList.remove('is-invalid');
-                                });
-                                document.querySelectorAll('.invalid-feedback').forEach(el => {
-                                    el.remove();
-                                });
+            //                     // Clear previous errors
+            //                     document.querySelectorAll('.is-invalid').forEach(el => {
+            //                         el.classList.remove('is-invalid');
+            //                     });
+            //                     document.querySelectorAll('.invalid-feedback').forEach(el => {
+            //                         el.remove();
+            //                     });
 
-                                // Show new errors
-                                Object.keys(data.errors).forEach(key => {
-                                    const input = form.querySelector(`[name="${key}"]`);
-                                    if (input) {
-                                        input.classList.add('is-invalid');
-                                        const errorDiv = document.createElement('div');
-                                        errorDiv.className = 'invalid-feedback';
-                                        errorDiv.textContent = data.errors[key][0];
-                                        input.parentNode.appendChild(errorDiv);
-                                    }
-                                });
-                            }
-                        })
-                        .catch(error => {
-                            // Hide loading overlay
-                            document.getElementById('loadingOverlay').classList.add('d-none');
-                            console.error('Error:', error);
-                            alert('An error occurred during registration. Please try again.');
-                        });
-                }
-            });
+            //                     // Show new errors
+            //                     Object.keys(data.errors).forEach(key => {
+            //                         const input = form.querySelector(`[name="${key}"]`);
+            //                         if (input) {
+            //                             input.classList.add('is-invalid');
+            //                             const errorDiv = document.createElement('div');
+            //                             errorDiv.className = 'invalid-feedback';
+            //                             errorDiv.textContent = data.errors[key][0];
+            //                             input.parentNode.appendChild(errorDiv);
+            //                         }
+            //                     });
+            //                 }
+            //             })
+            //             .catch(error => {
+            //                 // Hide loading overlay
+            //                 document.getElementById('loadingOverlay').classList.add('d-none');
+            //                 console.error('Error:', error);
+            //                 alert('An error occurred during registration. Please try again.');
+            //             });
+            //     }
+            // });
 
             // Restore inputs on load
             restoreInputs([...step1Inputs, ...step2Inputs]);
@@ -413,6 +415,161 @@
             if (activeRole) {
                 updateUnderline(activeRole);
             }
+        });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const step1 = document.getElementById("step1");
+            const step2 = document.getElementById("step2");
+            const emailInput = document.getElementById("email");
+            const phoneInput = document.getElementById("phone");
+            const emailError = document.getElementById("emailError");
+            const phoneError = document.getElementById("phoneError");
+            const nextStepBtn = document.getElementById("nextStep");
+            const form = document.querySelector("form");
+            const loadingOverlay = document.getElementById('loadingOverlay');
+
+            // Function to switch to step 1
+            function switchToStep1() {
+                step2.style.display = "none";
+                step1.style.display = "block";
+            }
+
+            // Function to validate email and phone against server
+            async function validateField(value, type) {
+                try {
+                    const response = await fetch(`/check/${type}`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')
+                                .getAttribute("content")
+                        },
+                        body: JSON.stringify({
+                            value: value
+                        })
+                    });
+                    return await response.json();
+                } catch (error) {
+                    console.error(`Error validating ${type}:`, error);
+                    return {
+                        exists: false,
+                        message: ""
+                    };
+                }
+            }
+
+            // Handle form submission
+            form.addEventListener("submit", async function(event) {
+                event.preventDefault();
+
+                if (!confirm("Are you sure you want to proceed with registration?")) {
+                    return;
+                }
+
+                // Show loading overlay
+                loadingOverlay.classList.remove('d-none');
+
+                // Validate email and phone before submission
+                const emailValidation = await validateField(emailInput.value, 'email');
+                const phoneValidation = await validateField(phoneInput.value, 'phone');
+
+                if (emailValidation.exists || phoneValidation.exists) {
+                    loadingOverlay.classList.add('d-none');
+
+                    // Show validation errors
+                    if (emailValidation.exists) {
+                        emailError.textContent = emailValidation.message;
+                        emailInput.classList.add("is-invalid");
+                    }
+                    if (phoneValidation.exists) {
+                        phoneError.textContent = phoneValidation.message;
+                        phoneInput.classList.add("is-invalid");
+                    }
+
+                    // Switch back to step 1
+                    switchToStep1();
+                    return;
+                }
+
+                // Proceed with form submission
+                const formData = new FormData(form);
+
+                try {
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'Accept': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+                        },
+                        credentials: 'same-origin'
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        window.location.href = data.redirect;
+                    } else if (data.errors) {
+                        loadingOverlay.classList.add('d-none');
+
+                        // Clear previous errors
+                        document.querySelectorAll('.is-invalid').forEach(el => {
+                            el.classList.remove('is-invalid');
+                        });
+                        document.querySelectorAll('.invalid-feedback').forEach(el => {
+                            el.remove();
+                        });
+
+                        // Show new errors
+                        Object.keys(data.errors).forEach(key => {
+                            const input = form.querySelector(`[name="${key}"]`);
+                            if (input) {
+                                input.classList.add('is-invalid');
+                                const errorDiv = document.createElement('div');
+                                errorDiv.className = 'invalid-feedback';
+                                errorDiv.textContent = data.errors[key][0];
+                                input.parentNode.appendChild(errorDiv);
+                            }
+                        });
+
+                        // If there are errors in email or phone, switch back to step 1
+                        if (data.errors.email || data.errors.phone) {
+                            switchToStep1();
+                        }
+                    }
+                } catch (error) {
+                    loadingOverlay.classList.add('d-none');
+                    console.error('Error:', error);
+                    alert('An error occurred during registration. Please try again.');
+                }
+            });
+
+            // Real-time validation for email and phone
+            [emailInput, phoneInput].forEach(input => {
+                input.addEventListener("input", async function() {
+                    const value = this.value.trim();
+                    const type = this.id;
+                    const errorElement = type === 'email' ? emailError : phoneError;
+
+                    if (value === "") {
+                        errorElement.textContent = "";
+                        this.classList.remove("is-invalid");
+                        return;
+                    }
+
+                    const validation = await validateField(value, type);
+
+                    if (validation.exists) {
+                        errorElement.textContent = validation.message;
+                        this.classList.add("is-invalid");
+                        nextStepBtn.disabled = true;
+                    } else {
+                        errorElement.textContent = "";
+                        this.classList.remove("is-invalid");
+                        checkStep1Inputs();
+                    }
+                });
+            });
         });
     </script>
 @endsection
