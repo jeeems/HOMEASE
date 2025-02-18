@@ -13,11 +13,15 @@ class LoginController extends Controller
     use AuthenticatesUsers;
 
     /**
-     * Where to redirect users after login.
-     *
-     * @var string
+     * Dynamically redirect users after login based on their role.
      */
-    protected $redirectTo = '/home';
+    protected function redirectTo()
+    {
+        if (Auth::check() && Auth::user()->role === 'worker') {
+            return route('worker.home');
+        }
+        return '/home';
+    }
 
     /**
      * Create a new controller instance.
@@ -56,8 +60,19 @@ class LoginController extends Controller
             return back()->withErrors(['role' => "It seems that your account is registered as a " . ucfirst($user->role) . "."]);
         }
 
-        return redirect()->intended($this->redirectTo);
+        return redirect()->intended($this->redirectTo());
     }
+
+    public function showLoginForm()
+    {
+        if (Auth::check()) {
+            return Auth::user()->role === 'worker'
+                ? redirect()->route('worker.home')
+                : redirect('/home');
+        }
+        return view('auth.login');
+    }
+
 
     /**
      * Handle logout request.

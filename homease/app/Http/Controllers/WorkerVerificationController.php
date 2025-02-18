@@ -54,7 +54,7 @@ class WorkerVerificationController extends Controller
             'agreed_privacy_policy' => true,
         ]);
 
-        return redirect()->route('home')->with('success', 'Your form has been submitted successfully!');
+        return redirect()->route('worker.contents.worker-home')->with('success', 'Your form has been submitted successfully!');
     }
     public function showSecondVerification()
     {

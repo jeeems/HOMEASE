@@ -91,12 +91,13 @@
                                 <div class="mt-4 flex space-x-4">
                                     <button class="bg-gray-200 px-4 py-2 rounded-md">Check Reviews</button>
 
-                                    <a href="{{ route('home') }}"
+                                    <a href="{{ route('workers.list', ['service_type' => 'Home Cleaning']) }}"
                                         class="book-now-btn relative inline-block px-3 py-2.5 text-white rounded-lg overflow-hidden transition-all duration-300 ease-in-out bg-blue-600 hover:text-blue-600">
                                         <span
                                             class="absolute inset-0 bg-white scale-x-0 transition-transform duration-300 ease-in-out origin-left"></span>
                                         <span class="relative z-10 no-underline">Book Now</span>
                                     </a>
+
                                 </div>
                             </div>
                         </div>
@@ -119,12 +120,13 @@
                                 </div>
                                 <div class="mt-4 flex space-x-4">
                                     <button class="bg-gray-200 px-4 py-2 rounded-md">Check Reviews</button>
-                                    <a href="{{ route('home') }}"
+                                    <a href="{{ route('workers.list', ['service_type' => 'Daycare']) }}"
                                         class="book-now-btn relative inline-block px-3 py-2.5 text-white rounded-lg overflow-hidden transition-all duration-300 ease-in-out bg-blue-600 hover:text-blue-600">
                                         <span
                                             class="absolute inset-0 bg-white scale-x-0 transition-transform duration-300 ease-in-out origin-left"></span>
                                         <span class="relative z-10 no-underline">Book Now</span>
                                     </a>
+
                                 </div>
                             </div>
                         </div>
@@ -146,12 +148,13 @@
                                 </div>
                                 <div class="mt-4 flex space-x-4">
                                     <button class="bg-gray-200 px-4 py-2 rounded-md">Check Reviews</button>
-                                    <a href="{{ route('home') }}"
+                                    <a href="{{ route('workers.list', ['service_type' => 'Carpentry']) }}"
                                         class="book-now-btn relative inline-block px-3 py-2.5 text-white rounded-lg overflow-hidden transition-all duration-300 ease-in-out bg-blue-600 hover:text-blue-600">
                                         <span
                                             class="absolute inset-0 bg-white scale-x-0 transition-transform duration-300 ease-in-out origin-left"></span>
                                         <span class="relative z-10 no-underline">Book Now</span>
                                     </a>
+
                                 </div>
                             </div>
                         </div>
@@ -200,7 +203,7 @@
                                 </div>
                                 <div class="mt-4 flex space-x-4">
                                     <button class="bg-gray-200 px-4 py-2 rounded-md">Check Reviews</button>
-                                    <a href="{{ route('home') }}"
+                                    <a href="{{ route('workers.list', ['service_type' => 'Electrician']) }}"
                                         class="book-now-btn relative inline-block px-3 py-2.5 text-white rounded-lg overflow-hidden transition-all duration-300 ease-in-out bg-blue-600 hover:text-blue-600">
                                         <span
                                             class="absolute inset-0 bg-white scale-x-0 transition-transform duration-300 ease-in-out origin-left"></span>
@@ -244,13 +247,7 @@
                     &copy; 2025 Homease. All rights reserved.
                 </div>
             </footer>
-
-
         </div>
-    @elseif (Auth::user()->role == 'worker')
-        <h3>Welcome, Worker!</h3>
-        {{-- <p>This is your homepage with worker-specific features.</p> --}}
-        <!-- Add worker-related content here -->
     @else
         <p>{{ __('You are logged in!') }}</p>
     @endif

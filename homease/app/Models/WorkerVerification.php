@@ -28,4 +28,8 @@ class WorkerVerification extends Model
         'agreed_terms',
         'agreed_privacy_policy'
     ];
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
