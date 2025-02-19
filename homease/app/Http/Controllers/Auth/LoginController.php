@@ -17,17 +17,11 @@ class LoginController extends Controller
      */
     protected function redirectTo()
     {
-        if (Auth::check()) {
-            if (Auth::user()->role === 'admin') {
-                return route('admin.dashboard');  // Redirects admins to their dashboard
-            }
-            if (Auth::user()->role === 'worker') {
-                return route('worker.home');  // Redirect workers
-            }
+        if (Auth::check() && Auth::user()->role === 'worker') {
+            return route('worker.home');
         }
-        return '/home'; // Default redirect
+        return '/home';
     }
-
 
     /**
      * Create a new controller instance.
@@ -46,21 +40,25 @@ class LoginController extends Controller
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
-            'role' => 'required|in:client,worker,admin'
+            'role' => 'required|in:client,worker'
         ]);
 
         $user = User::where('email', $request->email)->first();
 
+        // If email is not found
         if (!$user) {
             return back()->withErrors(['email' => 'Your email seems not registered. Do you want to register?']);
         }
 
-        if (!Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            return back()->withErrors(['password' => 'The provided password is incorrect.']);
+        // Check if the selected role matches the registered role BEFORE authentication
+        if ($user->role !== $request->role) {
+            return back()->withErrors(['role' => "It seems that your account is registered as a " . ucfirst($user->role) . "."])
+                ->withInput();
         }
 
-        if ($user->role !== $request->role) {
-            return back()->withErrors(['role' => "It seems that your account is registered as a " . ucfirst($user->role) . "."]);
+        // Attempt authentication
+        if (!Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            return back()->withErrors(['password' => 'The provided password is incorrect.'])->withInput();
         }
 
         return redirect()->intended($this->redirectTo());

@@ -23,7 +23,6 @@ Route::get('/', function () {
             'worker' => redirect()->route('worker.home'),
             'client' => redirect('/home'),
             'admin' => redirect()->route('admin.dashboard'),
-            default => redirect('/home'), // Default redirect if role is undefined
         };
     }
     return view('welcome');

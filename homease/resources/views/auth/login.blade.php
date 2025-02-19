@@ -137,7 +137,10 @@
                 option.addEventListener("click", function() {
                     roleOptions.forEach(opt => opt.classList.remove("active"));
                     this.classList.add("active");
-                    roleInput.value = this.getAttribute("data-role");
+                    roleInput.value = this.getAttribute("data-role"); // Update hidden input
+
+                    console.log("Selected role:", roleInput.value); // Debugging
+
                     updateUnderline(this);
                 });
             });
