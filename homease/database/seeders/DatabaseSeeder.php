@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,8 +18,10 @@ class DatabaseSeeder extends Seeder
         $this->call(BookingSeeder::class);
 
         // User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
+        //     'role' => 'admin',
+        //     'first_name' => 'Administrator',
+        //     'email' => 'admin@homease.com',
+        //     'password' => Hash::make('homeaseadmin123'),
         // ]);
     }
 }

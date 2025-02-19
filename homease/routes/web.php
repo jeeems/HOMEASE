@@ -10,79 +10,72 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminAuthController;
 
-Auth::routes(['verify' => true]); // Enable email verification
+// Authentication routes with email verification
+Auth::routes(['verify' => true]);
 
+// Homepage Redirect Logic
 Route::get('/', function () {
     if (Auth::check()) {
-        // Check if the user is authenticated and has a role
-        if (Auth::user()->role === 'worker') {
-            return redirect()->route('worker.home'); // Redirect to worker home
-        } elseif (Auth::user()->role === 'client') {
-            return redirect('/home'); // Redirect to client home
-        }
+        return match (Auth::user()->role) {
+            'worker' => redirect()->route('worker.home'),
+            'client' => redirect('/home'),
+            'admin' => redirect()->route('admin.dashboard'),
+            default => redirect('/home'), // Default redirect if role is undefined
+        };
     }
-    return view('welcome'); // If no user is signed in, show the welcome view
+    return view('welcome');
 })->name('welcome');
 
+// Admin Routes
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AdminAuthController::class, 'login']);
+    Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
 
+    // Secured Admin Routes (No Duplicate Prefix)
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+    });
+});
+
+
+// No Internet Page
 Route::view('/no-internet', 'no-internet');
 
-Route::get('/login', function () {
-    if (Auth::check() && Auth::user()->role === 'worker') {
-        return redirect()->route('worker.home'); // Redirect to worker home
-    }
-    if (Auth::check() && Auth::user()->role === 'client') {
-        return redirect('/home'); // Redirect to client home (or use route('home') if named)
-    }
-    return view('auth.login'); // Show login page if not authenticated
-})->name('login');
-
+// Authentication Routes
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-
-Route::get('/register', function () {
-    return view('auth.register');
-})->name('register.form'); // Renamed to avoid conflict
-
+Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register.form');
 Route::post('/register', [RegisterController::class, 'register'])->name('register');
 Route::post('/check-email', [RegisterController::class, 'checkEmail'])->name('check.email');
 Route::post('/check-phone', [RegisterController::class, 'checkPhone'])->name('check.phone');
 
+// Authenticated User Routes
 Route::middleware(['auth'])->group(function () {
     Route::get('/worker/verification-step-2', [WorkerVerificationController::class, 'showSecondVerification'])->name('verification.second');
+    Route::post('/worker/verification-submit', [WorkerVerificationController::class, 'store'])->name('verification.submit');
 
-    Route::post('/worker/verification-submit', [WorkerVerificationController::class, 'store']) // Change to `store`
-        ->name('verification.submit');
-});
-
-Route::get('/worker/home', function () {
-    return view('worker.contents.worker-home');
-})->name('worker.home');
-
-Route::middleware(['auth'])->group(function () {
     Route::get('/worker/home', [WorkerController::class, 'home'])->name('worker.home');
-});
-Route::put('/bookings/{id}', [BookingController::class, 'update'])->name('bookings.update');
 
-Route::get('/workers', [WorkerController::class, 'showWorkers'])->name('workers.list');
-Route::post('/rate-worker', [RatingController::class, 'store'])->middleware('auth')->name('rate.worker');
-
-Route::get('password/reset', function () {
-    return view('auth.passwords.email'); // Create this view if it doesn't exist
-})->name('password.request');
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Route::get('/pricing', function () {
-    return view('homepage_resources.pricing');
-})->name('pricing');
-
-// Profile route - Separate the profile routes
-Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
     Route::get('/profile/edit', [UserController::class, 'edit'])->name('profile.edit');
     Route::put('/profile/update', [UserController::class, 'update'])->name('profile.update');
 });
 
+// Public Routes
+Route::put('/bookings/{id}', [BookingController::class, 'update'])->name('bookings.update');
+Route::get('/workers', [WorkerController::class, 'showWorkers'])->name('workers.list');
+Route::post('/rate-worker', [RatingController::class, 'store'])->middleware('auth')->name('rate.worker');
+
+// Password Reset
+Route::view('password/reset', 'auth.passwords.email')->name('password.request');
+
+// Home, Pricing, and Settings
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::view('/pricing', 'homepage_resources.pricing')->name('pricing');
 Route::get('/settings', [UserController::class, 'settings'])->name('settings');
+
+// Logout Route
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');

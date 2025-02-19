@@ -35,10 +35,8 @@
                 <div>
                     <a
                         href="
-                        @if (Auth::check()) @if (Auth::user()->role == 'worker')
-                                {{ route('worker.home') }}
-                            @else
-                                {{ route('home') }} @endif
+                        @if (Auth::check()) @if (Auth::user()->role == 'admin')
+                                {{ route('admin.dashboard') }} @endif
 @else
 {{ route('welcome') }}
                         @endif
@@ -90,7 +88,7 @@
                                         class="block px-4 py-2 text-gray-700 hover:bg-gray-100 no-underline">Profile</a>
                                     <a href="{{ route('settings') }}"
                                         class="block px-4 py-2 text-gray-700 hover:bg-gray-100 no-underline">Settings</a>
-                                    <form action="{{ route('logout') }}" method="POST" class="w-full">
+                                    <form action="{{ route('admin.logout') }}" method="POST" class="w-full">
                                         @csrf
                                         <button type="submit"
                                             class="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 focus:outline-none">Logout</button>
@@ -149,7 +147,7 @@
                         class="block py-2 text-blue-600 hover:bg-gray-100 no-underline">Profile</a>
                     <a href="{{ route('settings') }}"
                         class="block py-2 text-blue-600 hover:bg-gray-100 no-underline">Settings</a>
-                    <form action="{{ route('logout') }}" method="POST">
+                    <form action="{{ route('admin.logout') }}" method="POST">
                         @csrf
                         <button type="submit"
                             class="w-full text-left py-2 text-red-600 hover:bg-gray-100 focus:outline-none">Logout</button>
@@ -157,7 +155,6 @@
                 </div>
             </div>
         @endif
-
 
         <main class="py-4 mt-16">
             @yield('content')
