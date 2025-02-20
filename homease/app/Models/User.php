@@ -105,4 +105,8 @@ class User extends Authenticatable implements MustVerifyEmail
         // For workers
         return $this->workerBookings()->where('status', 'ongoing');
     }
+    public function workerAvailability()
+    {
+        return $this->hasOne(WorkerAvailability::class, 'worker_id');
+    }
 }

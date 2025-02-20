@@ -63,6 +63,8 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/profile/update', [UserController::class, 'update'])->name('profile.update');
 });
 
+Route::post('/worker/availability-toggle', [WorkerController::class, 'toggleAvailability'])->name('worker.availability.toggle');
+
 // Public Routes
 Route::put('/bookings/{id}', [BookingController::class, 'update'])->name('bookings.update');
 Route::get('/workers', [WorkerController::class, 'showWorkers'])->name('workers.list');

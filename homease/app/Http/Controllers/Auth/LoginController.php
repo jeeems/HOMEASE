@@ -12,6 +12,7 @@ class LoginController extends Controller
 {
     use AuthenticatesUsers;
 
+
     /**
      * Dynamically redirect users after login based on their role.
      */

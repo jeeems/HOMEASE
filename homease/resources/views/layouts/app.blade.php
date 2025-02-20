@@ -89,6 +89,18 @@
                                     class="hidden absolute right-0 top-full w-48 bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200 z-50">
                                     <a href="{{ route('profile') }}"
                                         class="block px-4 py-2 text-gray-700 hover:bg-gray-100 no-underline">Profile</a>
+                                    @if (Auth::check() && Auth::user()->role == 'worker')
+                                        <div class="px-4 py-2 flex items-center justify-between">
+                                            <span class="text-gray-700">Availability</span>
+                                            <label class="switch">
+                                                <input type="checkbox" class="availability-toggle"
+                                                    id="desktopAvailabilityToggle"
+                                                    {{ Auth::user()->workerAvailability->is_available ?? 0 ? 'checked' : '' }}>
+                                                <span class="slider round"></span>
+                                            </label>
+                                        </div>
+                                    @endif
+
                                     <a href="{{ route('settings') }}"
                                         class="block px-4 py-2 text-gray-700 hover:bg-gray-100 no-underline">Settings</a>
                                     <form action="{{ route('logout') }}" method="POST" class="w-full">
@@ -134,21 +146,36 @@
                     </div>
                 @endif
 
-                <!-- Navigation Links -->
-                <ul class="mt-6 space-y-4 text-lg text-left pl-4">
-                    <li><a href="{{ route('home') }}"
-                            class="block hover:text-blue-400 transition no-underline">Home</a></li>
-                    <li><a href="{{ url('/') }}#services"
-                            class="block hover:text-blue-400 transition no-underline">Services</a></li>
-                    <li><a href="{{ route('pricing') }}"
-                            class="block hover:text-blue-400 transition no-underline">Pricing</a></li>
-                    <li><a href="#" class="block hover:text-blue-400 transition no-underline">About Us</a></li>
-                </ul>
+                @if (Auth::check() && Auth::user()->role == 'client' && !$isAuthPage)
+                    <!-- Navigation Links -->
+                    <ul class="mt-6 space-y-4 text-lg text-left pl-4">
+                        <li><a href="{{ route('home') }}"
+                                class="block hover:text-blue-400 transition no-underline">Home</a></li>
+                        <li><a href="{{ url('/') }}#services"
+                                class="block hover:text-blue-400 transition no-underline">Services</a></li>
+                        <li><a href="{{ route('pricing') }}"
+                                class="block hover:text-blue-400 transition no-underline">Pricing</a></li>
+                        <li><a href="#" class="block hover:text-blue-400 transition no-underline">About Us</a>
+                        </li>
+                    </ul>
+                @endif
 
                 <!-- Bottom Actions -->
-                <div class="absolute bottom-6 left-4 w-full text-left">
+                <div class="absolute bottom-6 left-4 w-[90%] text-left">
                     <a href="{{ route('profile') }}"
                         class="block py-2 text-blue-600 hover:bg-gray-100 no-underline">Profile</a>
+
+                    @if (Auth::check() && Auth::user()->role == 'worker')
+                        <div class="py-2 flex items-center justify-between">
+                            <span class="text-blue-600">Availability</span>
+                            <label class="switch ml-4"> <!-- Added ml-4 for margin-left -->
+                                <input type="checkbox" class="availability-toggle" id="mobileAvailabilityToggle"
+                                    {{ Auth::user()->workerAvailability->is_available ?? 0 ? 'checked' : '' }}>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    @endif
+
                     <a href="{{ route('settings') }}"
                         class="block py-2 text-blue-600 hover:bg-gray-100 no-underline">Settings</a>
                     <form action="{{ route('logout') }}" method="POST">
@@ -164,6 +191,54 @@
         <main class="py-4 mt-16">
             @yield('content')
         </main>
+
+        <!-- CSS -->
+        <style>
+            .switch {
+                position: relative;
+                display: inline-block;
+                width: 34px;
+                height: 20px;
+            }
+
+            .switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+            .slider {
+                position: absolute;
+                cursor: pointer;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: #ccc;
+                transition: .4s;
+                border-radius: 34px;
+            }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 14px;
+                width: 14px;
+                left: 3px;
+                bottom: 3px;
+                background-color: white;
+                transition: .4s;
+                border-radius: 50%;
+            }
+
+            input:checked+.slider {
+                background-color: #4CAF50;
+            }
+
+            input:checked+.slider:before {
+                transform: translateX(14px);
+            }
+        </style>
 
         <!-- JavaScript -->
         <script>
@@ -204,6 +279,56 @@
                     if (!profileDropdown.contains(event.target) && !profileDropdownBtn.contains(event.target)) {
                         profileDropdown.classList.add("hidden");
                     }
+                });
+            });
+
+            document.addEventListener("DOMContentLoaded", function() {
+                // Function to handle availability toggle
+                function handleAvailabilityToggle(event) {
+                    const isAvailable = event.target.checked ? 1 : 0;
+                    const otherToggle = document.querySelector('.availability-toggle:not(#' + event.target.id + ')');
+
+                    // Update the other toggle to match
+                    if (otherToggle) {
+                        otherToggle.checked = event.target.checked;
+                    }
+
+                    fetch("{{ route('worker.availability.toggle') }}", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                            },
+                            body: JSON.stringify({
+                                is_available: isAvailable
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                console.log("Availability status updated successfully!");
+                            } else {
+                                console.error("Failed to update availability:", data.message);
+                                // Revert the toggle if the update failed
+                                event.target.checked = !event.target.checked;
+                                if (otherToggle) {
+                                    otherToggle.checked = event.target.checked;
+                                }
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error:", error);
+                            // Revert the toggle on error
+                            event.target.checked = !event.target.checked;
+                            if (otherToggle) {
+                                otherToggle.checked = event.target.checked;
+                            }
+                        });
+                }
+
+                // Add event listeners to all availability toggles
+                document.querySelectorAll('.availability-toggle').forEach(toggle => {
+                    toggle.addEventListener('change', handleAvailabilityToggle);
                 });
             });
         </script>

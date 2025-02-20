@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Booking;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\WorkerAvailability;
 
 
 class WorkerController extends Controller
@@ -33,5 +34,26 @@ class WorkerController extends Controller
             ->get();
 
         return view('client.chosen_service.list', compact('workers', 'serviceType'));
+    }
+
+    public function toggleAvailability(Request $request)
+    {
+        $user = Auth::user();
+
+        if ($user->role !== 'worker') {
+            return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
+        }
+
+        // Ensure a record exists
+        if (!$user->workerAvailability) {
+            WorkerAvailability::create([
+                'worker_id' => $user->id,
+                'is_available' => $request->is_available
+            ]);
+        } else {
+            $user->workerAvailability->update(['is_available' => $request->is_available]);
+        }
+
+        return response()->json(['success' => true, 'message' => 'Availability updated']);
     }
 }

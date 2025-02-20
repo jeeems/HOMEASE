@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\WorkerAvailability;
 use App\Models\WorkerVerification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -53,6 +54,12 @@ class WorkerVerificationController extends Controller
             'agreed_terms' => true,
             'agreed_privacy_policy' => true,
         ]);
+
+        // Automatically create WorkerAvailability record with 'is_available' set to 'on'
+        WorkerAvailability::updateOrCreate(
+            ['worker_id' => Auth::id()], // If exists, update; if not, create
+            ['is_available' => true] // Default availability to 'on'
+        );
 
         return redirect()->route('worker.contents.worker-home')->with('success', 'Your form has been submitted successfully!');
     }
