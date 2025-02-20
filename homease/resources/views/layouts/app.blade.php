@@ -53,7 +53,8 @@
                         <ul class="flex space-x-8 text-lg items-center">
                             <li><a href="{{ route('home') }}"
                                     class="hover:text-blue-400 transition no-underline">Home</a></li>
-                            <li><a href="#services" class="hover:text-blue-400 transition no-underline">Services</a>
+                            <li><a href="{{ url('/') }}#services"
+                                    class="hover:text-blue-400 transition no-underline">Services</a>
                             </li>
                             <li><a href="{{ route('pricing') }}"
                                     class="hover:text-blue-400 transition no-underline">Pricing</a></li>
@@ -137,7 +138,8 @@
                 <ul class="mt-6 space-y-4 text-lg text-left pl-4">
                     <li><a href="{{ route('home') }}"
                             class="block hover:text-blue-400 transition no-underline">Home</a></li>
-                    <li><a href="#services" class="block hover:text-blue-400 transition no-underline">Services</a></li>
+                    <li><a href="{{ url('/') }}#services"
+                            class="block hover:text-blue-400 transition no-underline">Services</a></li>
                     <li><a href="{{ route('pricing') }}"
                             class="block hover:text-blue-400 transition no-underline">Pricing</a></li>
                     <li><a href="#" class="block hover:text-blue-400 transition no-underline">About Us</a></li>

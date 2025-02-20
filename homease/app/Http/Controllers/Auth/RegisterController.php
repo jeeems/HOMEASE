@@ -12,6 +12,12 @@ use Illuminate\Validation\Rules;
 
 class RegisterController extends Controller
 {
+
+    public function showRegistrationForm()
+    {
+        return view('auth.register');
+    }
+
     /**
      * Handle the incoming registration request.
      */
