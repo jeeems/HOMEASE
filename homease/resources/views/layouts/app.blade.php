@@ -67,11 +67,16 @@
                 @if (!$isAuthPage)
                     <div class="flex items-center space-x-4">
 
-                        <span class="text-lg font-medium md:hidden">{{ Auth::user()->first_name }}</span>
-                        <!-- Mobile Menu Button -->
-                        <button id="menuToggle" class="md:hidden text-blue-600 text-2xl focus:outline-none">
-                            <i class="fas fa-bars"></i>
-                        </button>
+                        @if (Auth::check())
+                            <div class="flex items-center space-x-2 md:hidden">
+                                <span class="text-sm font-medium">{{ Auth::user()->first_name }}</span>
+                            </div>
+
+                            <!-- Mobile Menu Button -->
+                            <button id="menuToggle" class="md:hidden text-blue-600 text-2xl focus:outline-none">
+                                <i class="fas fa-bars"></i>
+                            </button>
+                        @endif
 
                         @if (Auth::check())
                             <!-- Desktop Profile: First Name + Profile Icon -->
