@@ -35,20 +35,43 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach ($workers as $worker)
                     <div class="bg-white shadow-lg rounded-lg p-4 sm:p-6 transition-transform transform hover:scale-105">
-                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
-                            <div class="mb-2 sm:mb-0">
-                                <h3 class="text-lg sm:text-xl font-semibold text-gray-700">{{ $worker->full_name }}</h3>
-                                <p class="text-gray-500 text-sm sm:text-base">
-                                    Experience: {{ $worker->workerVerification->experience ?? 'N/A' }} years
-                                </p>
+                        <div class="flex items-center space-x-4">
+                            <!-- Profile Picture -->
+                            <div class="flex-shrink-0">
+                                @if ($worker->profile && $worker->profile->profile_picture)
+                                    <img src="{{ asset('storage/' . $worker->profile->profile_picture) }}"
+                                        alt="{{ $worker->full_name }}"
+                                        class="w-16 h-16 rounded-full border-2 border-gray-200 object-cover">
+                                @else
+                                    <div class="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center">
+                                        <i class="fas fa-user-circle text-3xl text-gray-400"></i>
+                                    </div>
+                                @endif
                             </div>
-                            <div class="text-right">
-                                <p class="text-yellow-500 text-sm sm:text-lg font-semibold flex items-center">
-                                    ⭐ {{ number_format($worker->averageRating(), 1) }}
-                                </p>
-                                <p class="text-blue-600 font-bold text-sm sm:text-base">
-                                    ₱{{ number_format($worker->hourly_rate, 2) }}/hour
-                                </p>
+
+                            <!-- Worker Information -->
+                            <div class="flex-1">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h3 class="text-lg sm:text-xl font-semibold text-gray-700">{{ $worker->full_name }}
+                                        </h3>
+                                        <p class="text-gray-500 text-sm sm:text-base">
+                                            Experience: {{ $worker->workerVerification->experience ?? 'N/A' }} years
+                                        </p>
+                                        <p class="text-gray-500 text-xs sm:text-sm flex items-center">
+                                            <i class="fas fa-map-marker-alt text-gray-500 mr-1"></i>
+                                            {{ $worker->barangay }}, {{ $worker->city }}
+                                        </p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-yellow-500 text-sm sm:text-lg font-semibold flex items-center">
+                                            ⭐ {{ number_format($worker->averageRating(), 1) }}
+                                        </p>
+                                        <p class="text-blue-600 font-bold text-sm sm:text-base">
+                                            ₱{{ number_format($worker->hourly_rate, 2) }}/hour
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

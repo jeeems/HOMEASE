@@ -63,6 +63,9 @@
                 <!-- Mobile Menu Button & Profile (Hide on login/register pages) -->
                 @if (!$isAuthPage)
                     <div class="flex items-center space-x-4">
+
+                        <span class="text-lg font-medium md:hidden">{{ Auth::user()->first_name }}</span>
+
                         <!-- Mobile Menu Button -->
                         <button id="menuToggle" class="md:hidden text-blue-600 text-2xl focus:outline-none">
                             <i class="fas fa-bars"></i>
@@ -142,15 +145,28 @@
                 </ul>
 
                 <!-- Bottom Actions -->
-                <div class="absolute bottom-6 left-4 w-full text-left">
+                <div class="absolute bottom-6 left-0 w-full text-left">
                     <a href="{{ route('profile') }}"
-                        class="block py-2 text-blue-600 hover:bg-gray-100 no-underline">Profile</a>
+                        class="block w-full px-4 py-3 text-blue-600 hover:bg-gray-100 no-underline">Profile</a>
+
+                    @if (Auth::check() && Auth::user()->role == 'worker')
+                        <div class="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-100 cursor-pointer "
+                            onclick="document.getElementById('mobileAvailabilityToggle').click()">
+                            <span class="text-blue-600">Availability</span>
+                            <label class="switch">
+                                <input type="checkbox" class="availability-toggle" id="mobileAvailabilityToggle"
+                                    {{ Auth::user()->workerAvailability->is_available ?? 0 ? 'checked' : '' }}>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    @endif
+
                     <a href="{{ route('settings') }}"
-                        class="block py-2 text-blue-600 hover:bg-gray-100 no-underline">Settings</a>
-                    <form action="{{ route('admin.logout') }}" method="POST">
+                        class="block w-full px-4 py-3 text-blue-600 hover:bg-gray-100 no-underline">Settings</a>
+                    <form action="{{ route('logout') }}" method="POST">
                         @csrf
                         <button type="submit"
-                            class="w-full text-left py-2 text-red-600 hover:bg-gray-100 focus:outline-none">Logout</button>
+                            class="w-full text-left px-4 py-3 text-red-600 hover:bg-gray-100 focus:outline-none">Logout</button>
                     </form>
                 </div>
             </div>

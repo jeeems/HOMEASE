@@ -2,11 +2,20 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Profile extends Model
 {
-    protected $fillable = ['profile_picture'];
+    use HasFactory;
+
+    protected $table = 'profiles';
+
+    protected $fillable = [
+        'user_id',
+        'profile_picture',
+        // Add any other fields that should be fillable
+    ];
 
     public function user()
     {

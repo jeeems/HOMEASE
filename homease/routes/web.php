@@ -60,7 +60,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
     Route::get('/profile/edit', [UserController::class, 'edit'])->name('profile.edit');
-    Route::put('/profile/update', [UserController::class, 'update'])->name('profile.update');
+    Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 });
 
 Route::post('/worker/availability-toggle', [WorkerController::class, 'toggleAvailability'])->name('worker.availability.toggle');

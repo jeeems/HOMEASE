@@ -15,23 +15,13 @@
                 @csrf
                 @method('PUT')
 
-                {{-- <!-- Profile Picture Upload -->
-                <div class="mb-4 text-center">
-                    @if (Auth::user()->profile_picture)
-                        <img src="{{ Auth::user()->profile_picture }}"
-                            class="w-32 h-32 rounded-full mx-auto mb-4 shadow-md border-2 border-gray-300">
-                    @else
-                        <i class="fas fa-user-circle text-8xl text-gray-600 mb-4"></i>
-                    @endif
-                    <input type="file" name="profile_picture" class="block w-full text-sm text-gray-600 mx-auto">
-                </div> --}}
-
                 <!-- Profile Picture Upload -->
                 <div class="mb-4 text-center">
                     <div class="relative">
-                        <img id="profilePreview" src="{{ Auth::user()->profile_picture ?? 'default-profile.png' }}"
+                        <img id="profilePreview"
+                            src="{{ $user->profile && $user->profile->profile_picture ? asset('storage/' . $user->profile->profile_picture) : asset('default-profile.png') }}"
                             class="w-32 h-32 rounded-full mx-auto mb-4 shadow-md border-2 border-gray-300">
-                        <input type="hidden" name="cropped_image" id="croppedImageInput">
+                        <input type="hidden" name="profile_picture" id="profilePictureInputHidden">
                     </div>
                     <input type="file" id="profilePictureInput" accept="image/*"
                         class="block w-full text-sm text-gray-600 mx-auto">
@@ -131,51 +121,54 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
 
     <script>
-        let cropper;
-        const profilePictureInput = document.getElementById('profilePictureInput');
-        const imageCropperModal = document.getElementById('imageCropperModal');
-        const imageToCrop = document.getElementById('imageToCrop');
-        const profilePreview = document.getElementById('profilePreview');
-        const saveCroppedImage = document.getElementById('saveCroppedImage');
-        const cancelCrop = document.getElementById('cancelCrop');
-        const croppedImageInput = document.getElementById('croppedImageInput');
+        document.addEventListener('DOMContentLoaded', function() {
+            let cropper;
+            const profilePictureInput = document.getElementById('profilePictureInput');
+            const imageCropperModal = document.getElementById('imageCropperModal');
+            const imageToCrop = document.getElementById('imageToCrop');
+            const profilePreview = document.getElementById('profilePreview');
+            const saveCroppedImage = document.getElementById('saveCroppedImage');
+            const cancelCrop = document.getElementById('cancelCrop');
+            const croppedImageInput = document.getElementById('profilePictureInputHidden');
 
-        profilePictureInput.addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    imageToCrop.src = e.target.result;
-                    imageCropperModal.classList.remove('hidden');
+            profilePictureInput.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        imageToCrop.src = e.target.result;
+                        imageCropperModal.classList.remove('hidden');
 
-                    // Destroy old cropper instance if exists
-                    if (cropper) {
-                        cropper.destroy();
+                        if (cropper) {
+                            cropper.destroy();
+                        }
+
+                        cropper = new Cropper(imageToCrop, {
+                            aspectRatio: 1,
+                            viewMode: 2,
+                            autoCropArea: 1,
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            saveCroppedImage.addEventListener('click', function() {
+                if (cropper) {
+                    const canvas = cropper.getCroppedCanvas();
+                    if (canvas) {
+                        const croppedDataUrl = canvas.toDataURL(); // Convert to base64
+                        profilePreview.src = croppedDataUrl; // Update preview
+                        croppedImageInput.value = croppedDataUrl; // Save to hidden input field
+                        imageCropperModal.classList.add('hidden'); // Hide modal
                     }
+                }
+            });
 
-                    // Initialize Cropper.js
-                    cropper = new Cropper(imageToCrop, {
-                        aspectRatio: 1,
-                        viewMode: 2,
-                        autoCropArea: 1,
-                    });
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        saveCroppedImage.addEventListener('click', function() {
-            const canvas = cropper.getCroppedCanvas();
-            if (canvas) {
-                profilePreview.src = canvas.toDataURL();
-                croppedImageInput.value = canvas.toDataURL(); // Store base64 image in hidden input
+            cancelCrop.addEventListener('click', function() {
                 imageCropperModal.classList.add('hidden');
-            }
-        });
-
-        cancelCrop.addEventListener('click', function() {
-            imageCropperModal.classList.add('hidden');
-            profilePictureInput.value = ""; // Reset input if canceled
+                profilePictureInput.value = ""; // Reset input if canceled
+            });
         });
 
         document.querySelector('form').addEventListener('submit', function() {

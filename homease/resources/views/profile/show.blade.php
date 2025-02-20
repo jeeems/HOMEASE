@@ -5,9 +5,9 @@
         <div class="bg-white shadow-lg rounded-lg p-6 mb-6">
             <!-- Profile Picture and Basic Info -->
             <div class="text-center mb-6">
-                @if (Auth::user()->profile_picture)
-                    <img src="{{ Auth::user()->profile_picture }}" alt="Profile Picture"
-                        class="w-48 h-48 rounded-full border-4 border-gray-300 mx-auto mb-4">
+                @if (Auth::user()->profile && Auth::user()->profile->profile_picture)
+                    <img src="{{ asset('storage/' . Auth::user()->profile->profile_picture) }}" alt="Profile"
+                        alt="Profile Picture" class="w-48 h-48 rounded-full border-4 border-gray-300 mx-auto mb-4">
                 @else
                     <i class="fas fa-user-circle text-8xl text-gray-600"></i>
                 @endif

@@ -25,16 +25,20 @@ class WorkerController extends Controller
     {
         $serviceType = $request->query('service_type');
 
-        // Get workers who provide the selected service
+        // Get only available workers who provide the selected service
         $workers = User::where('role', 'worker')
             ->whereHas('workerVerification', function ($query) use ($serviceType) {
                 $query->where('service_type', $serviceType);
             })
-            ->with('workerVerification') // Load verification details
+            ->whereHas('workerAvailability', function ($query) {
+                $query->where('is_available', true);
+            })
+            ->with(['workerVerification', 'workerAvailability']) // Load relationships
             ->get();
 
         return view('client.chosen_service.list', compact('workers', 'serviceType'));
     }
+
 
     public function toggleAvailability(Request $request)
     {

@@ -66,6 +66,8 @@
                 <!-- Mobile Menu Button & Profile (Hide on login/register pages) -->
                 @if (!$isAuthPage)
                     <div class="flex items-center space-x-4">
+
+                        <span class="text-lg font-medium md:hidden">{{ Auth::user()->first_name }}</span>
                         <!-- Mobile Menu Button -->
                         <button id="menuToggle" class="md:hidden text-blue-600 text-2xl focus:outline-none">
                             <i class="fas fa-bars"></i>
@@ -76,9 +78,9 @@
                             <div class="hidden md:flex items-center space-x-3 relative">
                                 <button id="profileDropdownBtn" class="flex items-center focus:outline-none space-x-2">
                                     <span class="text-lg font-medium">{{ Auth::user()->first_name }}</span>
-                                    @if (Auth::user()->profile_picture)
-                                        <img src="{{ Auth::user()->profile_picture }}" alt="Profile"
-                                            class="w-10 h-10 rounded-full border">
+                                    @if (Auth::user()->profile && Auth::user()->profile->profile_picture)
+                                        <img src="{{ asset('storage/' . Auth::user()->profile->profile_picture) }}"
+                                            alt="Profile" class="w-10 h-10 rounded-full border">
                                     @else
                                         <i class="fas fa-user-circle text-3xl text-gray-600"></i>
                                     @endif
@@ -90,8 +92,9 @@
                                     <a href="{{ route('profile') }}"
                                         class="block px-4 py-2 text-gray-700 hover:bg-gray-100 no-underline">Profile</a>
                                     @if (Auth::check() && Auth::user()->role == 'worker')
-                                        <div class="px-4 py-2 flex items-center justify-between">
-                                            <span class="text-gray-700">Availability</span>
+                                        <div class="px-4 py-2 flex items-center justify-between hover:bg-gray-100 cursor-pointer"
+                                            onclick="document.getElementById('desktopAvailabilityToggle').click()">
+                                            <span class="text-gray-700 ">Availability</span>
                                             <label class="switch">
                                                 <input type="checkbox" class="availability-toggle"
                                                     id="desktopAvailabilityToggle"
@@ -129,8 +132,8 @@
                 @if (Auth::check())
                     <!-- Profile Info -->
                     <div class="flex flex-col items-start mt-8 pl-4">
-                        @if (Auth::user()->profile_picture)
-                            <img src="{{ Auth::user()->profile_picture }}" alt="Profile"
+                        @if (Auth::user()->profile && Auth::user()->profile->profile_picture)
+                            <img src="{{ asset('storage/' . Auth::user()->profile->profile_picture) }}" alt="Profile"
                                 class="w-16 h-16 rounded-full border">
                         @else
                             <i class="fas fa-user-circle text-5xl text-gray-600"></i>
@@ -151,8 +154,15 @@
                     <ul class="mt-6 space-y-4 text-lg text-left pl-4">
                         <li><a href="{{ route('home') }}"
                                 class="block hover:text-blue-400 transition no-underline">Home</a></li>
-                        <li><a href="{{ url('/') }}#services"
-                                class="block hover:text-blue-400 transition no-underline">Services</a></li>
+                        <li>
+                            @if (request()->is('home'))
+                                <a href="#services"
+                                    class="block hover:text-blue-400 transition no-underline">Services</a>
+                            @else
+                                <a href="{{ url('/') }}#services"
+                                    class="block hover:text-blue-400 transition no-underline">Services</a>
+                            @endif
+                        </li>
                         <li><a href="{{ route('pricing') }}"
                                 class="block hover:text-blue-400 transition no-underline">Pricing</a></li>
                         <li><a href="#" class="block hover:text-blue-400 transition no-underline">About Us</a>
@@ -161,14 +171,15 @@
                 @endif
 
                 <!-- Bottom Actions -->
-                <div class="absolute bottom-6 left-4 w-[90%] text-left">
+                <div class="absolute bottom-6 left-0 w-full text-left">
                     <a href="{{ route('profile') }}"
-                        class="block py-2 text-blue-600 hover:bg-gray-100 no-underline">Profile</a>
+                        class="block w-full px-4 py-3 text-blue-600 hover:bg-gray-100 no-underline">Profile</a>
 
                     @if (Auth::check() && Auth::user()->role == 'worker')
-                        <div class="py-2 flex items-center justify-between">
+                        <div class="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-100 cursor-pointer "
+                            onclick="document.getElementById('mobileAvailabilityToggle').click()">
                             <span class="text-blue-600">Availability</span>
-                            <label class="switch ml-4"> <!-- Added ml-4 for margin-left -->
+                            <label class="switch">
                                 <input type="checkbox" class="availability-toggle" id="mobileAvailabilityToggle"
                                     {{ Auth::user()->workerAvailability->is_available ?? 0 ? 'checked' : '' }}>
                                 <span class="slider round"></span>
@@ -177,11 +188,11 @@
                     @endif
 
                     <a href="{{ route('settings') }}"
-                        class="block py-2 text-blue-600 hover:bg-gray-100 no-underline">Settings</a>
+                        class="block w-full px-4 py-3 text-blue-600 hover:bg-gray-100 no-underline">Settings</a>
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
                         <button type="submit"
-                            class="w-full text-left py-2 text-red-600 hover:bg-gray-100 focus:outline-none">Logout</button>
+                            class="w-full text-left px-4 py-3 text-red-600 hover:bg-gray-100 focus:outline-none">Logout</button>
                     </form>
                 </div>
             </div>
