@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Booking;
 use App\Models\User;
@@ -22,19 +21,23 @@ class BookingSeeder extends Seeder
             Booking::create([
                 'worker_id' => $worker->id,
                 'client_id' => $client->id,
-                'service_type' => 'Electrician',
+                'service_type' => 'Plumbing',
                 'scheduled_date' => Carbon::now()->addDays(2),
                 'status' => 'pending',
+                'booking_title' => 'Kitchen Sink Repair',
                 'notes' => 'Fix leaking sink in the kitchen.',
+                'client_address' => $client->address,
             ]);
 
             Booking::create([
                 'worker_id' => $worker->id,
                 'client_id' => $client->id,
-                'service_type' => 'Electrician',
+                'service_type' => 'Electrical',
                 'scheduled_date' => Carbon::now()->addDays(4),
                 'status' => 'ongoing',
+                'booking_title' => 'Living Room Rewiring',
                 'notes' => 'Rewire the living room lights.',
+                'client_address' => $client->address,
             ]);
         }
     }

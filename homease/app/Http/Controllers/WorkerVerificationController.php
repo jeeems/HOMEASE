@@ -61,7 +61,7 @@ class WorkerVerificationController extends Controller
             ['is_available' => true] // Default availability to 'on'
         );
 
-        return redirect()->route('worker.contents.worker-home')->with('success', 'Your form has been submitted successfully!');
+        return redirect()->route('worker.home')->with('success', 'Your form has been submitted successfully!');
     }
     public function showSecondVerification()
     {

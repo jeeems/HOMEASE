@@ -15,8 +15,22 @@ class Booking extends Model
         'service_type',
         'scheduled_date',
         'status',
+        'client_address',
+        'booking_title',
         'notes',
     ];
+
+    protected $casts = [
+        'scheduled_date' => 'datetime',
+    ];
+
+    protected $with = ['worker', 'client']; // Eager loading
+
+    // Status Constants
+    const STATUS_PENDING = 'pending';
+    const STATUS_CONFIRMED = 'confirmed';
+    const STATUS_COMPLETED = 'completed';
+    const STATUS_CANCELED = 'canceled';
 
     // Relationships
     public function worker()

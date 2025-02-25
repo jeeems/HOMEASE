@@ -53,11 +53,20 @@
                         <ul class="flex space-x-8 text-lg items-center">
                             <li><a href="{{ route('home') }}"
                                     class="hover:text-blue-400 transition no-underline">Home</a></li>
-                            <li><a href="{{ url('/') }}#services"
-                                    class="hover:text-blue-400 transition no-underline">Services</a>
+                            <li>
+                                @if (request()->is('home'))
+                                    <a href="#services" class="hover:text-blue-400 transition no-underline">Services</a>
+                                @else
+                                    <a href="{{ url('/') }}#services"
+                                        class="hover:text-blue-400 transition no-underline">Services</a>
+                                @endif
+
+
                             </li>
                             <li><a href="{{ route('pricing') }}"
                                     class="hover:text-blue-400 transition no-underline">Pricing</a></li>
+                            <li><a href="{{ route('bookings.index') }}"
+                                    class="hover:text-blue-400 transition no-underline">My Bookings</a></li>
                             <li><a href="#" class="hover:text-blue-400 transition no-underline">About Us</a></li>
                         </ul>
                     </div>
@@ -107,6 +116,12 @@
                                                 <span class="slider round"></span>
                                             </label>
                                         </div>
+                                    @endif
+
+                                    @if (Auth::check() && Auth::user()->role == 'client')
+                                        <a href="{{ route('bookings.index') }}"
+                                            class="block px-4 py-2 text-gray-700 hover:bg-gray-100 no-underline">My
+                                            Bookings</a>
                                     @endif
 
                                     <a href="{{ route('settings') }}"
@@ -170,6 +185,8 @@
                         </li>
                         <li><a href="{{ route('pricing') }}"
                                 class="block hover:text-blue-400 transition no-underline">Pricing</a></li>
+                        <li><a href="{{ route('bookings.index') }}"
+                                class="block hover:text-blue-400 transition no-underline">My Bookings</a></li>
                         <li><a href="#" class="block hover:text-blue-400 transition no-underline">About Us</a>
                         </li>
                     </ul>

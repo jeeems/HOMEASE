@@ -7,6 +7,7 @@ use App\Models\Booking;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\WorkerAvailability;
+use App\Events\NewBookingEvent;
 
 
 class WorkerController extends Controller

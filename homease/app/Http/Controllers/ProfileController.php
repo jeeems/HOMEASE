@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Profile;
 use App\Models\User;
+use App\Models\Rating;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -93,5 +94,14 @@ class ProfileController extends Controller
             DB::rollback();
             return redirect()->back()->with('error', 'Failed to update profile. Please try again: ' . $e->getMessage());
         }
+    }
+    public function viewWorkerProfile(User $user)
+    {
+        $profile = Profile::where('user_id', $user->id)->firstOrFail();
+
+        // Fetch ratings and reviews for the worker
+        $reviews = Rating::where('worker_id', $user->id)->latest()->get();
+
+        return view('profile.view-worker-profile', compact('user', 'profile', 'reviews'));
     }
 }
