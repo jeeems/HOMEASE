@@ -143,6 +143,17 @@
         </div>
     </div>
 
+    {{-- @if ($errors->any())
+        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif --}}
+
+    <!-- list.blade.php -->
     <!-- Enhanced Booking Modal with Modern Design -->
     <div id="bookingModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-lg shadow-lg w-full max-w-md overflow-hidden m-4 max-h-[90vh] md:max-h-[80vh]">
@@ -176,7 +187,7 @@
                         </div>
 
                         <!-- Address Input with Enhanced UI -->
-                        <div class="relative">
+                        <div class="relative z-50"> <!-- Added z-50 to bring this to the front -->
                             <label class="block text-sm font-semibold text-gray-600 mb-1">
                                 <i class="fas fa-map-marker-alt mr-1.5"></i>Your Address
                             </label>
@@ -184,18 +195,21 @@
                                 <input type="text" id="addressInput" name="address"
                                     class="w-full px-3 py-2 pl-10 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
                                     placeholder="Enter your address" required>
-                                {{-- <i
-                                    class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i> --}}
+                            </div>
+                            <!-- Suggestion Box (Ensures it stays on top) -->
+                            <div id="suggestionsBox"
+                                class="absolute top-full left-0 w-full bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto hidden z-50">
                             </div>
                         </div>
 
-                        <!-- Map Container -->
-                        <div>
+                        <!-- Map Container (Send it to the back) -->
+                        <div class="relative mt-4 z-10"> <!-- Lower z-index to ensure it's behind -->
                             <label class="block text-sm font-semibold text-gray-600 mb-1">
                                 <i class="fas fa-map mr-1.5"></i>Pin Your Location
                             </label>
                             <div id="map"
-                                class="w-full h-48 rounded-lg border border-gray-300 shadow-inner bg-gray-100"></div>
+                                class="w-full h-48 rounded-lg border border-gray-300 shadow-inner bg-gray-100 relative z-0">
+                            </div>
                             <p class="text-xs text-gray-500 mt-1">
                                 <i class="fas fa-info-circle mr-1"></i>Drag the marker to adjust your exact location
                             </p>
@@ -208,8 +222,8 @@
                             <label class="block text-sm font-semibold text-gray-600 mb-1">
                                 <i class="fas fa-heading mr-1.5"></i>Service Title
                             </label>
-                            <input type="text" name="title"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                            <input type="text" name="title" id="title"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg"
                                 placeholder="e.g. Broken Outlet" required>
                         </div>
 
@@ -218,8 +232,7 @@
                             <label class="block text-sm font-semibold text-gray-600 mb-1">
                                 <i class="fas fa-align-left mr-1.5"></i>Service Description
                             </label>
-                            <textarea name="description"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                            <textarea name="description" id="description" class="w-full px-3 py-2 border border-gray-300 rounded-lg"
                                 rows="2" placeholder="Describe what you need help with..." required></textarea>
                         </div>
 
@@ -276,6 +289,17 @@
                     </div>
                 </form>
             </div>
+        </div>
+    </div>
+
+    <!-- Add this right after your body tag or at the top of your content -->
+    <div id="loadingOverlay" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-[9999]">
+        <div class="bg-white p-6 rounded-lg shadow-xl text-center">
+            <div
+                class="animate-spin inline-block w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full mb-4">
+            </div>
+            <p class="text-gray-700 font-medium text-lg">Submitting your booking...</p>
+            <p class="text-gray-500 text-sm mt-2">Please wait while we process your request</p>
         </div>
     </div>
 
@@ -356,6 +380,33 @@
             transition-property: all;
             transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
             transition-duration: 300ms;
+        }
+
+        .pulse-effect {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 0, 0, 0.2);
+            animation: pulse 1.5s infinite;
+            position: relative;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.5);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+
+        .custom-div-icon i {
+            position: relative;
+            display: block;
+            text-align: center;
         }
     </style>
 
@@ -718,6 +769,166 @@
                     suggestionsBox.classList.add("hidden");
                 }
             });
+
+            document.getElementById('bookingForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                // Clear previous error messages
+                document.querySelectorAll('.error-message').forEach(el => el.remove());
+
+                // Validate fields
+                if (!validateForm()) return;
+
+                // Show loading overlay
+                const loadingOverlay = document.getElementById('loadingOverlay');
+                loadingOverlay.style.display = 'flex';
+
+                // Get the modal container
+                const modalBody = document.querySelector('.p-4.md\\:p-6.overflow-y-auto');
+
+                // Add visual "disabled" state to the entire modal
+                modalBody.classList.add('opacity-50', 'pointer-events-none');
+
+                // Disable form buttons to prevent multiple submissions
+                const submitButton = this.querySelector('button[type="submit"]');
+                const cancelButton = this.querySelector('button[type="button"]');
+                submitButton.disabled = true;
+                cancelButton.disabled = true;
+
+                // Add "disabled" visual state
+                submitButton.classList.add('opacity-50', 'cursor-not-allowed');
+                cancelButton.classList.add('opacity-50', 'cursor-not-allowed');
+
+                // Create FormData object
+                const formData = new FormData(this);
+
+                try {
+                    const response = await fetch(this.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'Accept': 'application/json'
+                        }
+                    });
+
+                    const data = await response.json();
+
+                    // Hide loading overlay
+                    loadingOverlay.style.display = 'none';
+                    // Show submitting state
+                    await showToast("Submitting your booking request...", "submitting");
+
+                    if (data.success) {
+                        // Show success toast
+                        await showToast("Booking submitted successfully!", "success");
+
+                        // Close modal after success
+                        closeBookingModal();
+
+                        // Redirect if needed
+                        if (data.redirect) {
+                            window.location.href = data.redirect;
+                        }
+                    } else {
+                        // Re-enable modal
+                        modalBody.classList.remove('opacity-50', 'pointer-events-none');
+
+                        // Re-enable buttons
+                        submitButton.disabled = false;
+                        cancelButton.disabled = false;
+                        submitButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                        cancelButton.classList.remove('opacity-50', 'cursor-not-allowed');
+
+                        // Handle validation errors
+                        if (data.errors) {
+                            Object.entries(data.errors).forEach(([field, messages]) => {
+                                const element = document.getElementById(field);
+                                if (element) {
+                                    element.classList.add('border-red-500');
+                                    const errorMessage = document.createElement('div');
+                                    errorMessage.className = 'error-message text-red-500 text-sm mt-1';
+                                    errorMessage.innerHTML =
+                                        `<i class="fas fa-exclamation-circle mr-1"></i>${messages[0]}`;
+                                    element.parentNode.appendChild(errorMessage);
+                                }
+                            });
+                        }
+                        await showToast(data.message || "Error submitting booking", "error");
+                    }
+                } catch (error) {
+                    console.error('Booking error:', error);
+
+                    // Hide loading overlay
+                    loadingOverlay.style.display = 'none';
+
+                    // Re-enable modal
+                    modalBody.classList.remove('opacity-50', 'pointer-events-none');
+
+                    // Re-enable buttons
+                    submitButton.disabled = false;
+                    cancelButton.disabled = false;
+                    submitButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                    cancelButton.classList.remove('opacity-50', 'cursor-not-allowed');
+
+                    await showToast("Error submitting booking. Please try again.", "error");
+                }
+            });
+
+            function validateForm() {
+                const requiredFields = {
+                    'title': 'Service Title',
+                    'description': 'Service Description',
+                    'addressInput': 'Address',
+                    'latitude': 'Location',
+                    'longitude': 'Location',
+                    'bookingDate': 'Booking Date',
+                    'hourInput': 'Hour',
+                    'minuteInput': 'Minute',
+                    'ampmInput': 'AM/PM'
+                };
+
+                let missingFields = [];
+                let isValid = true;
+
+                // Clear previous error styles
+                document.querySelectorAll('.error-message').forEach(el => el.remove());
+                document.querySelectorAll('.border-red-500').forEach(el => el.classList.remove('border-red-500'));
+
+                for (let [fieldId, label] of Object.entries(requiredFields)) {
+                    const element = document.getElementById(fieldId);
+                    if (!element || !element.value.trim()) {
+                        isValid = false;
+                        if (element) {
+                            element.classList.add('border-red-500');
+
+                            // Add error message below the field
+                            const errorMessage = document.createElement('div');
+                            errorMessage.className = 'error-message text-red-500 text-sm mt-1';
+                            errorMessage.innerHTML =
+                                `<i class="fas fa-exclamation-circle mr-1"></i>${label} is required`;
+                            element.parentNode.appendChild(errorMessage);
+                        }
+                        missingFields.push(label);
+                    }
+                }
+
+                if (!isValid) {
+                    // Show comprehensive error message
+                    showToast(`Please fill in all required fields: ${missingFields.join(', ')}`, "error");
+
+                    // Scroll to first error
+                    const firstError = document.querySelector('.border-red-500');
+                    if (firstError) {
+                        firstError.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'center'
+                        });
+                    }
+                }
+
+                return isValid;
+            }
         }
 
         document.addEventListener("DOMContentLoaded", initMap);
@@ -734,45 +945,147 @@
             }, 300);
         });
 
-        // Show toast message function
+        const toastStyles = `
+<style>
+    .toast-enter {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    .toast-enter-active {
+        transform: translateX(0);
+        opacity: 1;
+        transition: all 0.3s ease-out;
+    }
+    .toast-exit {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    .toast-exit-active {
+        transform: translateX(100%);
+        opacity: 0;
+        transition: all 0.3s ease-in;
+    }
+</style>
+`;
+        document.head.insertAdjacentHTML('beforeend', toastStyles);
+
+        // Updated toast function with proper animation handling
+        let activeToast = null;
+
         function showToast(message, type = "info") {
-            const toast = document.createElement("div");
-            toast.className = `fixed bottom-4 right-4 px-4 py-2 rounded-lg shadow-lg z-50 ${
+            return new Promise((resolve) => {
+                // If there's an active toast, remove it first
+                if (activeToast) {
+                    activeToast.classList.add('toast-exit');
+                    activeToast.classList.add('toast-exit-active');
+                    setTimeout(() => {
+                        if (activeToast && activeToast.parentNode) {
+                            document.body.removeChild(activeToast);
+                        }
+                        createNewToast();
+                    }, 300);
+                } else {
+                    createNewToast();
+                }
+
+                function createNewToast() {
+                    const toast = document.createElement("div");
+                    toast.className = `fixed bottom-4 right-4 px-4 py-2 rounded-lg shadow-lg z-50 toast-enter ${
                 type === "warning" ? "bg-yellow-100 text-yellow-800 border-l-4 border-yellow-500" :
                 type === "error" ? "bg-red-100 text-red-800 border-l-4 border-red-500" :
-                "bg-blue-100 text-blue-800 border-l-4 border-blue-500"
+                type === "success" ? "bg-green-100 text-green-800 border-l-4 border-green-500" :
+                type === "submitting" ? "bg-blue-100 text-blue-800 border-l-4 border-blue-500" :
+                "bg-gray-100 text-gray-800 border-l-4 border-gray-500"
             }`;
-            toast.innerHTML = `<div class="flex items-center">
+
+                    toast.innerHTML = `<div class="flex items-center">
                 <i class="fas fa-${
                     type === "warning" ? "exclamation-triangle" :
                     type === "error" ? "times-circle" :
+                    type === "success" ? "check-circle" :
+                    type === "submitting" ? "spinner fa-spin" :
                     "info-circle"
                 } mr-2"></i>
                 <span>${message}</span>
             </div>`;
-            document.body.appendChild(toast);
 
-            setTimeout(() => {
-                toast.classList.add("opacity-0", "transition-opacity", "duration-500");
-                setTimeout(() => {
-                    document.body.removeChild(toast);
-                }, 500);
-            }, 3000);
+                    document.body.appendChild(toast);
+                    activeToast = toast;
+
+                    // Start enter animation
+                    requestAnimationFrame(() => {
+                        toast.classList.add('toast-enter-active');
+                        toast.classList.remove('toast-enter');
+                    });
+
+                    // Remove after delay
+                    setTimeout(() => {
+                        toast.classList.add('toast-exit');
+                        toast.classList.add('toast-exit-active');
+                        setTimeout(() => {
+                            if (toast.parentNode) {
+                                document.body.removeChild(toast);
+                            }
+                            if (activeToast === toast) {
+                                activeToast = null;
+                            }
+                            resolve();
+                        }, 300);
+                    }, 3000);
+                }
+            });
         }
 
         // Initialize the map when the modal is opened
         function openBookingModal(workerId, workerName, serviceType) {
+
+            if (!document.querySelector('input[name="_token"]')) {
+                const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+                const csrfInput = document.createElement('input');
+                csrfInput.type = 'hidden';
+                csrfInput.name = '_token';
+                csrfInput.value = csrfToken;
+                document.getElementById('bookingForm').appendChild(csrfInput);
+            }
+
+            console.log('Opening modal with:', {
+                workerId,
+                workerName,
+                serviceType
+            });
+
             document.getElementById("workerId").value = workerId;
             document.getElementById("workerName").value = workerName;
             document.getElementById("serviceType").value = serviceType;
+
+            // Reset form fields
+            document.getElementById("bookingForm").reset();
+            // Re-set the worker ID and service type after reset
+            document.getElementById("workerId").value = workerId;
+            document.getElementById("serviceType").value = serviceType;
+            document.getElementById("workerName").value = workerName;
+
             document.getElementById("bookingModal").classList.remove("hidden");
             document.body.style.overflow = "hidden";
-            setTimeout(initMap, 300); // Delay to ensure the map is rendered correctly
+            setTimeout(initMap, 300);
         }
 
         function closeBookingModal() {
             document.getElementById("bookingModal").classList.add("hidden");
+            document.getElementById("loadingOverlay").style.display = 'none';
             document.body.style.overflow = "";
+
+            // Reset button states in case modal is closed during processing
+            const submitButton = document.querySelector('#bookingForm button[type="submit"]');
+            const cancelButton = document.querySelector('#bookingForm button[type="button"]');
+            if (submitButton) {
+                submitButton.disabled = false;
+                submitButton.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+            if (cancelButton) {
+                cancelButton.disabled = false;
+                cancelButton.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
         }
 
         document.addEventListener("DOMContentLoaded", function() {

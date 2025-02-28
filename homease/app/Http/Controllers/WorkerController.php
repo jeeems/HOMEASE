@@ -7,7 +7,7 @@ use App\Models\Booking;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\WorkerAvailability;
-use App\Events\NewBookingEvent;
+use App\Models\Rating;
 
 
 class WorkerController extends Controller
@@ -16,7 +16,7 @@ class WorkerController extends Controller
     {
         // Get the logged-in worker's pending and ongoing bookings
         $bookings = Booking::where('worker_id', Auth::id())
-            ->whereIn('status', ['pending', 'ongoing'])
+            ->whereIn('status', ['pending', 'ongoing', 'completed', 'cancelled'])
             ->get();
 
         return view('worker.contents.worker-home', compact('bookings'));
@@ -60,5 +60,16 @@ class WorkerController extends Controller
         }
 
         return response()->json(['success' => true, 'message' => 'Availability updated']);
+    }
+
+    public function showRating($id)
+    {
+        $rating = Rating::findOrFail($id);
+
+        return response()->json([
+            'rating' => $rating->rating,
+            'comment' => $rating->comment,
+            'review_photos' => json_decode($rating->review_photos, true) ?? []
+        ]);
     }
 }

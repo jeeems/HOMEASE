@@ -1,3 +1,4 @@
+<!-- app.blade.php -->
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -15,6 +16,11 @@
     <!-- Fonts & Styles -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -122,15 +128,28 @@
                                         <a href="{{ route('bookings.index') }}"
                                             class="block px-4 py-2 text-gray-700 hover:bg-gray-100 no-underline">My
                                             Bookings</a>
-                                    @endif
 
-                                    <a href="{{ route('settings') }}"
-                                        class="block px-4 py-2 text-gray-700 hover:bg-gray-100 no-underline">Settings</a>
-                                    <form action="{{ route('logout') }}" method="POST" class="w-full">
-                                        @csrf
-                                        <button type="submit"
-                                            class="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 focus:outline-none">Logout</button>
-                                    </form>
+
+                                        {{-- <a href="{{ route('settings') }}"
+                                        class="block px-4 py-2 text-gray-700 hover:bg-gray-100 no-underline">Settings</a> --}}
+                                        <form action="{{ route('logout') }}" method="POST" class="w-full">
+                                            @csrf
+                                            <button type="submit" onclick="console.log('Logout button clicked')"
+                                                class="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 focus:outline-none">Logout</button>
+                                        </form>
+                                    @endif
+                                    @if (Auth::check() && Auth::user()->role == 'worker')
+                                        <a href="{{ route('logout') }}"
+                                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                                            class="block px-4 py-2 text-red-600 hover:bg-gray-100 focus:outline-none no-underline">
+                                            Logout
+                                        </a>
+
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                            class="hidden">
+                                            @csrf
+                                        </form>
+                                    @endif
                                 </div>
                             </div>
                         @endif
@@ -193,12 +212,16 @@
                 @endif
 
                 <!-- Bottom Actions -->
-                <div class="absolute bottom-6 left-0 w-full text-left">
+                <div class="absolute bottom-6 left-0 w-full text-left bg-white border-t border-gray-200">
+                    <!-- Profile Link -->
                     <a href="{{ route('profile') }}"
-                        class="block w-full px-4 py-3 text-blue-600 hover:bg-gray-100 no-underline">Profile</a>
+                        class="block w-full px-4 py-3 text-blue-600 hover:bg-gray-100 transition duration-200 no-underline">
+                        Profile
+                    </a>
 
+                    <!-- Worker Availability Toggle -->
                     @if (Auth::check() && Auth::user()->role == 'worker')
-                        <div class="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-100 cursor-pointer "
+                        <div class="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-100 transition duration-200 cursor-pointer"
                             onclick="document.getElementById('mobileAvailabilityToggle').click()">
                             <span class="text-blue-600">Availability</span>
                             <label class="switch">
@@ -209,13 +232,28 @@
                         </div>
                     @endif
 
-                    <a href="{{ route('settings') }}"
-                        class="block w-full px-4 py-3 text-blue-600 hover:bg-gray-100 no-underline">Settings</a>
-                    <form action="{{ route('logout') }}" method="POST">
-                        @csrf
-                        <button type="submit"
-                            class="w-full text-left px-4 py-3 text-red-600 hover:bg-gray-100 focus:outline-none">Logout</button>
-                    </form>
+                    <!-- Client Logout -->
+                    @if (Auth::check() && Auth::user()->role == 'client')
+                        <form action="{{ route('logout') }}" method="POST" class="w-full">
+                            @csrf
+                            <button type="submit" onclick="console.log('Logout button clicked')"
+                                class="w-full text-left px-4 py-3 text-red-600 hover:bg-gray-100 transition duration-200 focus:outline-none">
+                                Logout
+                            </button>
+                        </form>
+                    @endif
+
+                    <!-- Worker Logout -->
+                    @if (Auth::check() && Auth::user()->role == 'worker')
+                        <a href="{{ route('logout') }}"
+                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                            class="block w-full text-left px-4 py-3 text-red-600 hover:bg-gray-100 transition duration-200 focus:outline-none no-underline">
+                            Logout
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                            @csrf
+                        </form>
+                    @endif
                 </div>
             </div>
         @endif

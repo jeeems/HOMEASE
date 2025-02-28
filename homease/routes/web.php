@@ -36,8 +36,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AdminAuthController::class, 'login']);
 
-    // Secured Admin Routes
-    Route::middleware(['auth'])->group(function () {
+    // Secured Admin Routes (Using 'admin' middleware for better security)
+    Route::middleware(['auth', 'admin'])->group(function () {
         Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
         Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
     });
@@ -54,7 +54,6 @@ Route::post('/check-phone', [RegisterController::class, 'checkPhone'])->name('ch
 Route::view('password/reset', 'auth.passwords.email')->name('password.request');
 
 // All Other Routes Require Authentication
-// The auth middleware will automatically redirect to login page if user is not authenticated
 Route::middleware(['auth'])->group(function () {
     // Worker Verification Routes
     Route::get('/worker/verification-step-2', [WorkerVerificationController::class, 'showSecondVerification'])->name('verification.second');
@@ -64,6 +63,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/worker/home', [WorkerController::class, 'home'])->name('worker.home');
     Route::post('/worker/availability-toggle', [WorkerController::class, 'toggleAvailability'])->name('worker.availability.toggle');
     Route::get('/worker/profile/{user}', [ProfileController::class, 'viewWorkerProfile'])->name('worker.profile');
+    Route::get('/worker/rating/{id}', [WorkerController::class, 'showRating'])->name('worker.rating.show');
 
     // Profile Routes
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
@@ -73,15 +73,19 @@ Route::middleware(['auth'])->group(function () {
     // Booking Routes
     Route::put('/bookings/{id}', [BookingController::class, 'update'])->name('bookings.update');
     Route::post('/book-service', [BookingController::class, 'store'])->name('book.service');
-    Route::put('/bookings/{id}/cancel', [BookingController::class, 'cancel'])->name('bookings.cancel');
-
+    Route::post('/bookings/{id}/cancel', [BookingController::class, 'cancel'])->name('bookings.cancel'); // Changed from PUT to POST for browser support
+    Route::get('/bookings/{id}/completion-details', [BookingController::class, 'getCompletionDetails'])->name('bookings.completion-details');
 
     // Workers Listing
     Route::get('/workers', [WorkerController::class, 'showWorkers'])->name('workers.list');
     Route::get('/my-bookings', [BookingController::class, 'index'])->name('bookings.index');
 
-    // Rating
-    Route::post('/rate-worker', [RatingController::class, 'store'])->name('rate.worker');
+    // Ratings Routes
+    Route::post('/ratings', [RatingController::class, 'store'])->name('ratings.store');
+    Route::post('/rating/store', [App\Http\Controllers\RatingController::class, 'store'])->name('rating.store');
+    Route::get('/worker/rating/{id}', [WorkerController::class, 'showRating']);
+
+    Route::get('/worker/ratings/{id}', [App\Http\Controllers\WorkerController::class, 'getRatingDetails'])->name('worker.rating.details');
 
     // Home, Pricing, and Settings
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

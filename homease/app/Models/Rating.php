@@ -9,7 +9,16 @@ class Rating extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['worker_id', 'client_id', 'rating', 'review'];
+    // In app/Models/Rating.php
+    protected $fillable = [
+        'worker_id',
+        'client_id',
+        'booking_id',
+        'booking_title',
+        'rating',
+        'comment',
+        'review_photos'
+    ];
 
     public function worker()
     {

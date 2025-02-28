@@ -18,10 +18,14 @@ class Booking extends Model
         'client_address',
         'booking_title',
         'notes',
+        'completion_date',
+        'hours_worked',
+        'total_amount',
     ];
 
     protected $casts = [
         'scheduled_date' => 'datetime',
+        'completion_date' => 'datetime',
     ];
 
     protected $with = ['worker', 'client']; // Eager loading
@@ -30,7 +34,7 @@ class Booking extends Model
     const STATUS_PENDING = 'pending';
     const STATUS_CONFIRMED = 'confirmed';
     const STATUS_COMPLETED = 'completed';
-    const STATUS_CANCELED = 'canceled';
+    const STATUS_CANCELLED = 'cancelled';
 
     // Relationships
     public function worker()

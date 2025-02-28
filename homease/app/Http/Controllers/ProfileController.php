@@ -17,8 +17,50 @@ class ProfileController extends Controller
     public function show()
     {
         $user = Auth::user();
-        $profile = Profile::where('user_id', $user->id)->first();
-        return view('profile.show', compact('user', 'profile'));
+
+        if ($user->role == 'worker') {
+            // Load reviews for this worker
+            $reviews = Rating::where('worker_id', $user->id)
+                ->with('client')
+                ->paginate(5);
+
+            // Calculate average rating
+            $averageRating = Rating::where('worker_id', $user->id)->avg('rating') ?: 0;
+
+            // Get client profiles for display
+            $clientProfiles = [];
+            foreach ($reviews as $review) {
+                if ($review->client_id) {
+                    $profile = Profile::where('user_id', $review->client_id)->first();
+                    if ($profile) {
+                        $clientProfiles[$review->client_id] = $profile;
+                    }
+                }
+            }
+
+            return view('profile.show', compact('reviews', 'averageRating', 'clientProfiles'));
+        }
+
+        if ($user->role == 'client') {
+            // Fetch reviews where the logged-in user (client) is the one who made the booking
+            $reviews = Rating::where('client_id', $user->id)
+                ->with(['worker']) // Load worker profile
+                ->paginate(5);
+
+            $workerProfiles = [];
+            foreach ($reviews as $review) {
+                if ($review->client_id) {
+                    $profile = Profile::where('user_id', $review->client_id)->first();
+                    if ($profile) {
+                        $workerProfiles[$review->client_id] = $profile;
+                    }
+                }
+            }
+
+            return view('profile.show', compact('reviews'));
+        }
+
+        return view('profile.show');
     }
 
     public function update(Request $request)
@@ -99,9 +141,18 @@ class ProfileController extends Controller
     {
         $profile = Profile::where('user_id', $user->id)->firstOrFail();
 
-        // Fetch ratings and reviews for the worker
+        // Fetch client ratings
         $reviews = Rating::where('worker_id', $user->id)->latest()->get();
 
-        return view('profile.view-worker-profile', compact('user', 'profile', 'reviews'));
+        // Get the clients who left reviews
+        $clientProfiles = [];
+        foreach ($reviews as $review) {
+            $clientProfiles[$review->client_id] = Profile::where('user_id', $review->client_id)->first();
+        }
+
+        // Calculate average rating
+        $averageRating = $reviews->avg('rating');
+
+        return view('profile.view-worker-profile', compact('user', 'profile', 'reviews', 'averageRating', 'clientProfiles'));
     }
 }
