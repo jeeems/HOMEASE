@@ -409,7 +409,7 @@
                                     <span class="text-muted">(search: "{{ request('search') }}")</span>
                                 @endif
                             </div>
-                            {{ $recentBookings->appends(request()->query())->links() }}
+                            {{ $recentBookings->appends(request()->query())->links('pagination::bootstrap-4') }}
                         </div>
                     </div>
                 </div>
@@ -435,7 +435,16 @@
                                                 <div class="d-flex align-items-center mb-2 mb-md-0">
                                                     <div class="avatar me-3 bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
                                                         style="width: 42px; height: 42px; font-size: 16px;">
-                                                        {{ substr($rating->client->full_name ?? 'U', 0, 1) }}
+                                                        @if ($booking->client->profile->profile_picture)
+                                                            <img src="{{ asset('storage/' . $booking->client->profile->profile_picture) }}"
+                                                                alt="{{ $booking->client->full_name }}"
+                                                                class="w-100 h-100 rounded-circle object-fit-cover">
+                                                        @else
+                                                            <span
+                                                                class="text-white bg-primary d-flex align-items-center justify-content-center w-100 h-100 rounded-circle">
+                                                                {{ substr($booking->client->full_name, 0, 1) }}
+                                                            </span>
+                                                        @endif
                                                     </div>
                                                     <div>
                                                         <div class="fw-semibold">
@@ -517,7 +526,16 @@
                                                 <div class="d-flex align-items-center">
                                                     <div class="avatar me-3 bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center"
                                                         style="width: 46px; height: 46px; font-size: 18px;">
-                                                        {{ substr($worker->full_name, 0, 1) }}
+                                                        @if ($worker->profile->profile_picture)
+                                                            <img src="{{ asset('storage/' . $worker->profile->profile_picture) }}"
+                                                                alt="{{ $worker->full_name }}"
+                                                                class="w-100 h-100 rounded-circle object-fit-cover">
+                                                        @else
+                                                            <span
+                                                                class="text-white bg-primary d-flex align-items-center justify-content-center w-100 h-100 rounded-circle">
+                                                                {{ substr($worker->full_name, 0, 1) }}
+                                                            </span>
+                                                        @endif
                                                     </div>
                                                     <div>
                                                         <h6 class="mb-1 fw-semibold">{{ $worker->full_name }}</h6>
@@ -541,19 +559,19 @@
                                                         <div class="small mt-1">
                                                             <span
                                                                 class="badge
-                                                @if ($worker->service_type == 'Plumbing') bg-primary
-                                                @elseif($worker->service_type == 'Carpentry') bg-success
-                                                @elseif($worker->service_type == 'Home Cleaning') bg-info
-                                                @elseif($worker->service_type == 'Electrician') bg-warning
+                                                @if ($worker->workerVerification->service_type == 'Plumbing') bg-primary
+                                                @elseif($worker->workerVerification->service_type == 'Carpentry') bg-success
+                                                @elseif($worker->workerVerification->service_type == 'Home Cleaning') bg-info
+                                                @elseif($worker->workerVerification->service_type == 'Electrician') bg-warning
                                                 @else bg-secondary @endif
                                                 bg-opacity-10
-                                                @if ($worker->service_type == 'Plumbing') text-primary
-                                                @elseif($worker->service_type == 'Carpentry') text-success
-                                                @elseif($worker->service_type == 'Home Cleaning') text-info
-                                                @elseif($worker->service_type == 'Electrician') text-warning
+                                                @if ($worker->workerVerification->service_type == 'Plumbing') text-primary
+                                                @elseif($worker->workerVerification->service_type == 'Carpentry') text-success
+                                                @elseif($worker->workerVerification->service_type == 'Home Cleaning') text-info
+                                                @elseif($worker->workerVerification->service_type == 'Electrician') text-warning
                                                 @else text-secondary @endif
                                                 px-2 py-1 rounded-pill">
-                                                                {{ $worker->service_type }}
+                                                                {{ $worker->workerVerification->service_type }}
                                                             </span>
                                                         </div>
                                                     </div>
