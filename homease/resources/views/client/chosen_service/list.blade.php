@@ -1,3 +1,4 @@
+<!-- booking worker's page -->
 @extends('layouts.app')
 
 @section('content')
@@ -19,9 +20,14 @@
                 Available Workers
             </h2>
 
+            <!-- list.blade.php nav -->
             <!-- Navigation for services with smooth scrolling -->
-            <div class="mb-6 overflow-x-auto scrollbar-hide relative">
-                <ul id="serviceNav" class="inline-flex space-x-2 sm:space-x-4 py-2 px-1">
+            <div class="container mx-auto px-4">
+                <!-- For larger screens - all items visible, no scroll -->
+                <ul
+                    class="hidden sm:flex justify-center space-x-4 py-3 px-4
+            bg-transparent transition-all duration-300 mx-auto max-w-4xl">
+
                     @php
                         $services = ['Home Cleaning', 'Daycare', 'Carpentry', 'Plumbing', 'Electrician'];
                     @endphp
@@ -29,12 +35,12 @@
                         @php
                             $isActive = strtolower($serviceType) == strtolower(str_replace(' ', '-', $service));
                         @endphp
-                        <li class="whitespace-nowrap">
+                        <li class="min-w-[160px]">
                             <a href="{{ route('workers.list', ['service_type' => strtolower(str_replace(' ', '-', $service))]) }}"
-                                class="block px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 shadow-sm no-underline
+                                class="flex items-center space-x-2 px-5 py-2.5 text-sm font-medium rounded-full transition-all duration-300 no-underline
                         {{ $isActive
-                            ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md transform -translate-y-0.5 active-item'
-                            : 'bg-white text-gray-700 hover:bg-blue-50 hover:text-blue-600' }}">
+                            ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-md transform scale-105'
+                            : 'bg-gray-50 text-gray-700 hover:bg-blue-50 hover:text-blue-600 hover:shadow-sm' }}">
                                 <i
                                     class="fas fa-{{ $service == 'Home Cleaning'
                                         ? 'broom'
@@ -44,12 +50,115 @@
                                                 ? 'hammer'
                                                 : ($service == 'Plumbing'
                                                     ? 'faucet'
-                                                    : 'bolt'))) }} mr-1.5"></i>
-                                {{ $service }}
+                                                    : 'bolt'))) }} text-lg"></i>
+                                <span class="whitespace-nowrap">{{ $service }}</span>
                             </a>
                         </li>
                     @endforeach
                 </ul>
+
+                <!-- Mobile Version -->
+                <div class="sm:hidden w-full mb-4">
+                    <div class="flex flex-col items-center">
+                        @php
+                            $activeService = '';
+                            foreach ($services as $service) {
+                                if (strtolower($serviceType) == strtolower(str_replace(' ', '-', $service))) {
+                                    $activeService = $service;
+                                    break;
+                                }
+                            }
+                        @endphp
+
+                        <a href="#"
+                            class="flex items-center space-x-2 px-8 py-3 mb-3 text-base font-medium rounded-full
+                    bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-md w-auto no-underline">
+                            <i
+                                class="fas fa-{{ $activeService == 'Home Cleaning'
+                                    ? 'broom'
+                                    : ($activeService == 'Daycare'
+                                        ? 'baby'
+                                        : ($activeService == 'Carpentry'
+                                            ? 'hammer'
+                                            : ($activeService == 'Plumbing'
+                                                ? 'faucet'
+                                                : 'bolt'))) }} text-lg"></i>
+                            <span>{{ $activeService }}</span>
+                        </a>
+
+                        <div class="grid grid-cols-2 gap-2 w-full max-w-xs">
+                            @foreach ($services as $service)
+                                @php
+                                    $isActive = strtolower($serviceType) == strtolower(str_replace(' ', '-', $service));
+                                @endphp
+                                @if (!$isActive)
+                                    <a href="{{ route('workers.list', ['service_type' => strtolower(str_replace(' ', '-', $service))]) }}"
+                                        class="flex items-center space-x-2 justify-center px-4 py-2 text-xs font-medium rounded-full
+                                bg-gray-50 text-gray-700 hover:bg-blue-50 hover:text-blue-600 shadow-sm transition-all duration-300 no-underline">
+                                        <i
+                                            class="fas fa-{{ $service == 'Home Cleaning'
+                                                ? 'broom'
+                                                : ($service == 'Daycare'
+                                                    ? 'baby'
+                                                    : ($service == 'Carpentry'
+                                                        ? 'hammer'
+                                                        : ($service == 'Plumbing'
+                                                            ? 'faucet'
+                                                            : 'bolt'))) }} text-lg"></i>
+                                        <span>{{ $service }}</span>
+                                    </a>
+                                @endif
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sorting Options -->
+            <div class="flex justify-end mb-6">
+                <div class="relative w-52">
+                    <!-- Sort Button -->
+                    <button id="sort-button"
+                        class="flex items-center justify-between w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer shadow-sm">
+                        <div class="flex items-center">
+                            <i class="fas fa-sort-amount-down w-5 text-blue-500"></i>
+                            <span id="selected-sort" class="ml-2 truncate">Highest Rated</span>
+                        </div>
+                        <i class="fas fa-chevron-down text-xs text-gray-600 ml-2"></i>
+                    </button>
+
+                    <!-- Sort Dropdown -->
+                    <div id="sort-dropdown"
+                        class="absolute left-0 right-0 mt-1 bg-white rounded-lg shadow-lg z-10 hidden border border-gray-100">
+                        <ul class="py-1 m-0 p-0">
+                            <li data-value="highest"
+                                class="sort-option flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 cursor-pointer">
+                                <i class="fas fa-sort-amount-down w-5 text-center text-blue-500"></i>
+                                <span class="ml-2 truncate">Highest Rated</span>
+                            </li>
+                            <li data-value="lowest"
+                                class="sort-option flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 cursor-pointer">
+                                <i class="fas fa-sort-amount-up w-5 text-center text-blue-500"></i>
+                                <span class="ml-2 truncate">Lowest Rated</span>
+                            </li>
+                            <li data-value="price-low"
+                                class="sort-option flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 cursor-pointer">
+                                <i class="fas fa-dollar-sign w-5 text-center text-blue-500"></i>
+                                <span class="ml-2 truncate">Price: Low to High</span>
+                            </li>
+                            <li data-value="price-high"
+                                class="sort-option flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 cursor-pointer">
+                                <i class="fas fa-dollar-sign w-5 text-center text-blue-500"></i>
+                                <span class="ml-2 truncate">Price: High to Low</span>
+                            </li>
+                            <li data-value="experience"
+                                class="sort-option flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 cursor-pointer">
+                                <i class="fas fa-briefcase w-5 text-center text-blue-500"></i>
+                                <span class="ml-2 truncate">Most Experienced</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
 
             <div class="flex items-center mb-6">
@@ -303,6 +412,55 @@
         </div>
     </div>
 
+    <!-- Conflict Modal -->
+    <div id="conflictModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-lg w-full max-w-md overflow-hidden m-4">
+            <!-- Modal Header -->
+            <div class="bg-gradient-to-r from-red-500 to-red-600 rounded-t-lg px-6 py-3">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-xl font-bold text-white flex items-center">
+                        <i class="fas fa-exclamation-triangle mr-2"></i>Scheduling Conflict
+                    </h2>
+                    <button onclick="closeConflictModal()" class="text-white hover:text-gray-200 focus:outline-none">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-6">
+                <div class="mb-4 text-center">
+                    <div
+                        class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-red-100 text-red-500 mb-4">
+                        <i class="fas fa-calendar-times text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Time Slot Unavailable</h3>
+                    <p id="conflictMessage" class="text-gray-600"></p>
+                </div>
+
+                <div class="bg-amber-50 border-l-4 border-amber-400 p-4 mb-4">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-lightbulb text-amber-400"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-amber-700">
+                                Try selecting a different time or date for your booking.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-center">
+                    <button onclick="closeConflictModal()"
+                        class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium transition-colors">
+                        <i class="fas fa-check mr-1.5"></i>Okay, I'll Try Another Time
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -407,6 +565,27 @@
             position: relative;
             display: block;
             text-align: center;
+        }
+
+        /* Reset list styles */
+        #sort-dropdown ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        /* Ensure icons are centered in their fixed width */
+        #sort-dropdown i,
+        #sort-button i.fas:not(.fa-chevron-down) {
+            display: inline-block;
+            text-align: center;
+        }
+
+        /* Ensure consistent icon alignment in button and dropdown */
+        #sort-button .flex.items-center,
+        #sort-dropdown .sort-option {
+            display: flex;
+            align-items: center;
         }
     </style>
 
@@ -577,6 +756,113 @@
             }, {
                 passive: true
             });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get elements
+            const sortButton = document.getElementById('sort-button');
+            const sortDropdown = document.getElementById('sort-dropdown');
+            const selectedSort = document.getElementById('selected-sort');
+            const sortOptions = document.querySelectorAll('.sort-option');
+            const workersContainer = document.getElementById('refreshable-content').querySelector('.grid');
+
+            // Toggle dropdown
+            sortButton.addEventListener('click', function() {
+                sortDropdown.classList.toggle('hidden');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!sortButton.contains(e.target) && !sortDropdown.contains(e.target)) {
+                    sortDropdown.classList.add('hidden');
+                }
+            });
+
+            // Handle option selection
+            sortOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const value = this.dataset.value;
+                    const text = this.querySelector('span').textContent;
+                    const icon = this.querySelector('i').cloneNode(true);
+
+                    // Update button text and icon
+                    selectedSort.textContent = text;
+                    sortButton.querySelector('.flex.items-center i').className = icon.className;
+
+                    // Hide dropdown
+                    sortDropdown.classList.add('hidden');
+
+                    // Sort workers
+                    sortWorkers(value);
+                });
+            });
+
+            // Function to sort workers
+            function sortWorkers(sortType) {
+                if (!workersContainer) return;
+
+                const workerCards = Array.from(workersContainer.querySelectorAll('.bg-white.shadow-lg'));
+
+                workerCards.sort((a, b) => {
+                    if (sortType === 'highest') {
+                        // Sort by rating (highest first)
+                        const ratingA = parseFloat(a.querySelector('.font-semibold i.fas.fa-star')
+                            .nextSibling.textContent.trim());
+                        const ratingB = parseFloat(b.querySelector('.font-semibold i.fas.fa-star')
+                            .nextSibling.textContent.trim());
+                        return ratingB - ratingA;
+                    } else if (sortType === 'lowest') {
+                        // Sort by rating (lowest first)
+                        const ratingA = parseFloat(a.querySelector('.font-semibold i.fas.fa-star')
+                            .nextSibling.textContent.trim());
+                        const ratingB = parseFloat(b.querySelector('.font-semibold i.fas.fa-star')
+                            .nextSibling.textContent.trim());
+                        return ratingA - ratingB;
+                    } else if (sortType === 'price-low') {
+                        // Sort by price (low to high)
+                        const priceA = parseFloat(a.querySelector('.font-bold').textContent.replace('₱', '')
+                            .replace(',', ''));
+                        const priceB = parseFloat(b.querySelector('.font-bold').textContent.replace('₱', '')
+                            .replace(',', ''));
+                        return priceA - priceB;
+                    } else if (sortType === 'price-high') {
+                        // Sort by price (high to low)
+                        const priceA = parseFloat(a.querySelector('.font-bold').textContent.replace('₱', '')
+                            .replace(',', ''));
+                        const priceB = parseFloat(b.querySelector('.font-bold').textContent.replace('₱', '')
+                            .replace(',', ''));
+                        return priceB - priceA;
+                    } else if (sortType === 'experience') {
+                        // Sort by experience
+                        const expTextA = a.querySelector('.fas.fa-briefcase').nextElementSibling.textContent
+                            .trim();
+                        const expTextB = b.querySelector('.fas.fa-briefcase').nextElementSibling.textContent
+                            .trim();
+
+                        // Extract numbers from text using regex
+                        const expA = parseInt(expTextA.match(/(\d+)/) ? expTextA.match(/(\d+)/)[0] : 0);
+                        const expB = parseInt(expTextB.match(/(\d+)/) ? expTextB.match(/(\d+)/)[0] : 0);
+
+                        return expB - expA;
+                    }
+                    return 0;
+                });
+
+                // Remove all workers from the container
+                while (workersContainer.firstChild) {
+                    workersContainer.removeChild(workersContainer.firstChild);
+                }
+
+                // Append the sorted workers back to the container
+                workerCards.forEach(card => {
+                    workersContainer.appendChild(card);
+                });
+            }
+
+            // Initial sort (highest rated)
+            if (workersContainer && workersContainer.childElementCount > 0) {
+                sortWorkers('highest');
+            }
         });
 
 
@@ -816,6 +1102,7 @@
 
                     // Hide loading overlay
                     loadingOverlay.style.display = 'none';
+
                     // Show submitting state
                     await showToast("Submitting your booking request...", "submitting");
 
@@ -840,21 +1127,32 @@
                         submitButton.classList.remove('opacity-50', 'cursor-not-allowed');
                         cancelButton.classList.remove('opacity-50', 'cursor-not-allowed');
 
-                        // Handle validation errors
-                        if (data.errors) {
-                            Object.entries(data.errors).forEach(([field, messages]) => {
-                                const element = document.getElementById(field);
-                                if (element) {
-                                    element.classList.add('border-red-500');
-                                    const errorMessage = document.createElement('div');
-                                    errorMessage.className = 'error-message text-red-500 text-sm mt-1';
-                                    errorMessage.innerHTML =
-                                        `<i class="fas fa-exclamation-circle mr-1"></i>${messages[0]}`;
-                                    element.parentNode.appendChild(errorMessage);
-                                }
-                            });
+                        // Check if this is a scheduling conflict error
+                        if (data.errors && data.errors.booking_date &&
+                            data.errors.booking_date[0].includes('conflicts with an existing booking')) {
+                            // Show conflict modal with the message
+                            showConflictModal(data.message);
+
+                            // Close the booking modal
+                            closeBookingModal();
+                        } else {
+                            // Handle validation errors
+                            if (data.errors) {
+                                Object.entries(data.errors).forEach(([field, messages]) => {
+                                    const element = document.getElementById(field);
+                                    if (element) {
+                                        element.classList.add('border-red-500');
+                                        const errorMessage = document.createElement('div');
+                                        errorMessage.className =
+                                            'error-message text-red-500 text-sm mt-1';
+                                        errorMessage.innerHTML =
+                                            `<i class="fas fa-exclamation-circle mr-1"></i>${messages[0]}`;
+                                        element.parentNode.appendChild(errorMessage);
+                                    }
+                                });
+                            }
+                            await showToast(data.message || "Error submitting booking", "error");
                         }
-                        await showToast(data.message || "Error submitting booking", "error");
                     }
                 } catch (error) {
                     console.error('Booking error:', error);
@@ -1123,5 +1421,29 @@
                 });
             }
         });
+
+        // Function to show the conflict modal
+        function showConflictModal(message) {
+            // Set the message
+            document.getElementById('conflictMessage').textContent = message;
+
+            // Show the modal
+            const conflictModal = document.getElementById('conflictModal');
+            conflictModal.classList.remove('hidden');
+            conflictModal.classList.add('flex');
+
+            // Disable scrolling on the body
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Function to close the conflict modal
+        function closeConflictModal() {
+            const conflictModal = document.getElementById('conflictModal');
+            conflictModal.classList.add('hidden');
+            conflictModal.classList.remove('flex');
+
+            // Re-enable scrolling on the body
+            document.body.style.overflow = 'auto';
+        }
     </script>
 @endsection

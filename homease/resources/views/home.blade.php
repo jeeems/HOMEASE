@@ -89,7 +89,11 @@
                                     <p class="text-gray-400 text-sm ml-2">/ session</p>
                                 </div>
                                 <div class="mt-4 flex space-x-4">
-                                    <button class="bg-gray-200 px-4 py-2 rounded-md">Check Reviews</button>
+                                    <button
+                                        onclick="window.location.href='{{ route('reviews.all-reviews', ['service_type' => 'Home Cleaning']) }}'"
+                                        class="bg-gray-200 px-4 py-2 rounded-md">
+                                        Check Reviews
+                                    </button>
 
                                     <a href="{{ route('workers.list', ['service_type' => 'Home Cleaning']) }}"
                                         class="book-now-btn relative inline-block px-3 py-2.5 text-white rounded-lg overflow-hidden transition-all duration-300 ease-in-out bg-blue-600 hover:text-blue-600">
@@ -119,7 +123,12 @@
                                     <p class="text-gray-400 text-sm ml-2">/ hour</p>
                                 </div>
                                 <div class="mt-4 flex space-x-4">
-                                    <button class="bg-gray-200 px-4 py-2 rounded-md">Check Reviews</button>
+                                    <button
+                                        onclick="window.location.href='{{ route('reviews.all-reviews', ['service_type' => 'Daycare']) }}'"
+                                        class="bg-gray-200 px-4 py-2 rounded-md">
+                                        Check Reviews
+                                    </button>
+
                                     <a href="{{ route('workers.list', ['service_type' => 'Daycare']) }}"
                                         class="book-now-btn relative inline-block px-3 py-2.5 text-white rounded-lg overflow-hidden transition-all duration-300 ease-in-out bg-blue-600 hover:text-blue-600">
                                         <span
@@ -147,7 +156,12 @@
                                     <p class="text-gray-400 text-sm ml-2">/ session</p>
                                 </div>
                                 <div class="mt-4 flex space-x-4">
-                                    <button class="bg-gray-200 px-4 py-2 rounded-md">Check Reviews</button>
+                                    <button
+                                        onclick="window.location.href='{{ route('reviews.all-reviews', ['service_type' => 'Carpentry']) }}'"
+                                        class="bg-gray-200 px-4 py-2 rounded-md">
+                                        Check Reviews
+                                    </button>
+
                                     <a href="{{ route('workers.list', ['service_type' => 'Carpentry']) }}"
                                         class="book-now-btn relative inline-block px-3 py-2.5 text-white rounded-lg overflow-hidden transition-all duration-300 ease-in-out bg-blue-600 hover:text-blue-600">
                                         <span
@@ -174,8 +188,13 @@
                                     <p class="text-gray-400 text-sm ml-2">/ session</p>
                                 </div>
                                 <div class="mt-4 flex space-x-4">
-                                    <button class="bg-gray-200 px-4 py-2 rounded-md">Check Reviews</button>
-                                    <a href="{{ route('home') }}"
+                                    <button
+                                        onclick="window.location.href='{{ route('reviews.all-reviews', ['service_type' => 'Plumbing']) }}'"
+                                        class="bg-gray-200 px-4 py-2 rounded-md">
+                                        Check Reviews
+                                    </button>
+
+                                    <a href="{{ route('workers.list', ['service_type' => 'Plumbing']) }}"
                                         class="book-now-btn relative inline-block px-3 py-2.5 text-white rounded-lg overflow-hidden transition-all duration-300 ease-in-out bg-blue-600 hover:text-blue-600">
                                         <span
                                             class="absolute inset-0 bg-white scale-x-0 transition-transform duration-300 ease-in-out origin-left"></span>
@@ -202,7 +221,11 @@
                                     <p class="text-gray-400 text-sm ml-2">/ session</p>
                                 </div>
                                 <div class="mt-4 flex space-x-4">
-                                    <button class="bg-gray-200 px-4 py-2 rounded-md">Check Reviews</button>
+                                    <button
+                                        onclick="window.location.href='{{ route('reviews.all-reviews', ['service_type' => 'Electrician']) }}'"
+                                        class="bg-gray-200 px-4 py-2 rounded-md">
+                                        Check Reviews
+                                    </button>
                                     <a href="{{ route('workers.list', ['service_type' => 'Electrician']) }}"
                                         class="book-now-btn relative inline-block px-3 py-2.5 text-white rounded-lg overflow-hidden transition-all duration-300 ease-in-out bg-blue-600 hover:text-blue-600">
                                         <span

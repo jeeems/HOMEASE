@@ -13,6 +13,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Fonts & Styles -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
@@ -136,12 +137,19 @@
 
                 <!-- Navigation Links -->
                 <ul class="mt-6 space-y-4 text-lg text-left pl-4">
-                    <li><a href="{{ route('home') }}"
-                            class="block hover:text-blue-400 transition no-underline">Home</a></li>
-                    <li><a href="#services" class="block hover:text-blue-400 transition no-underline">Services</a></li>
-                    <li><a href="{{ route('pricing') }}"
-                            class="block hover:text-blue-400 transition no-underline">Pricing</a></li>
-                    <li><a href="#" class="block hover:text-blue-400 transition no-underline">About Us</a></li>
+                    <li><a href="{{ route('admin.dashboard') }}"
+                            class="block hover:text-blue-400 transition no-underline">Dashboard</a></li>
+                    <li><a href="{{ route('admin.dashboard') }}"
+                            class="block hover:text-blue-400 transition no-underline">Users</a></li>
+                    <li><a href="{{ route('admin.dashboard') }}"
+                            class="block hover:text-blue-400 transition no-underline">Bookings</a></li>
+                    <li><a href="{{ route('admin.dashboard') }}"
+                            class="block hover:text-blue-400 transition no-underline">Services</a></li>
+                    <li><a href="{{ route('admin.dashboard') }}"
+                            class="block hover:text-blue-400 transition no-underline">Ratings</a></li>
+                    <li><a href="{{ route('admin.dashboard') }}"
+                            class="block hover:text-blue-400 transition no-underline">Reports</a></li>
+
                 </ul>
 
                 <!-- Bottom Actions -->

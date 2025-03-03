@@ -58,4 +58,16 @@ class RatingController extends Controller
             'review_photos' => json_decode($rating->review_photos, true) ?? []
         ]);
     }
+
+    public function allReviews($service_type)
+    {
+        // Fetch reviews for the given service type
+        $reviews = Rating::whereHas('worker', function ($query) use ($service_type) {
+            $query->whereHas('workerVerification', function ($query) use ($service_type) {
+                $query->where('service_type', $service_type);
+            });
+        })->orderBy('created_at', 'desc')->get();
+
+        return view('reviews.all-reviews', compact('reviews', 'service_type'));
+    }
 }

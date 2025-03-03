@@ -31,15 +31,34 @@ Route::get('/', function () {
 // No Internet Page - Public
 Route::view('/no-internet', 'no-internet');
 
-// Public Admin Login Routes
+// Public Views
+Route::get('/reviews/{service_type}', [RatingController::class, 'allReviews'])->name('reviews.all-reviews');
+Route::view('/pricing', 'homepage_resources.pricing')->name('pricing');
+
+// Admin Login Routes
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AdminAuthController::class, 'login']);
 
     // Secured Admin Routes (Using 'admin' middleware for better security)
-    Route::middleware(['auth', 'admin'])->group(function () {
+    Route::middleware(['auth'])->group(function () {
         Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
         Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+        Route::get('/users', [AdminController::class, 'users'])->name('users');
+        Route::get('/bookings', [AdminController::class, 'bookings'])->name('bookings');
+
+        Route::get('/bookings/create', [AdminController::class, 'createBooking'])->name('bookings.create');
+        Route::get('/bookings/{booking}', [AdminController::class, 'showBooking'])->name('bookings.show');
+        Route::get('/bookings/{booking}/edit', [AdminController::class, 'editBooking'])->name('bookings.edit');
+        Route::put('/bookings/{booking}/approve', [AdminController::class, 'approveBooking'])->name('bookings.approve');
+        Route::put('/bookings/{booking}/cancel', [AdminController::class, 'cancelBooking'])->name('bookings.cancel');
+
+        Route::get('/services', [AdminController::class, 'services'])->name('services');
+        Route::get('/ratings', [AdminController::class, 'ratings'])->name('ratings');
+        Route::get('/reports', [AdminController::class, 'reports'])->name('reports');
+        Route::get('/settings', [AdminController::class, 'settings'])->name('settings');
+        Route::get('/workers', [AdminController::class, 'workers'])->name('workers');
+        Route::get('/workers/{worker}', [AdminController::class, 'showWorker'])->name('workers.show');
     });
 });
 
@@ -89,7 +108,6 @@ Route::middleware(['auth'])->group(function () {
 
     // Home, Pricing, and Settings
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-    Route::view('/pricing', 'homepage_resources.pricing')->name('pricing');
     Route::get('/settings', [UserController::class, 'settings'])->name('settings');
 
     // Logout Route

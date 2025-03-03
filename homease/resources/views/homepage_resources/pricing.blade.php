@@ -69,8 +69,12 @@
                     <li class="mb-1">• Specialized care (e.g., special needs): PHP 299 - 499 per hour per child</li>
                 </ul>
                 <div class="mt-4 d-flex flex-column flex-md-row justify-content-between gap-3">
-                    <a href="#" class="btn btn-secondary w-100 w-md-auto">CHECK REVIEWS</a>
-                    <a href="#" class="btn btn-primary w-100 w-md-auto">BOOK NOW</a>
+                    <a href="{{ route('reviews.all-reviews', ['service_type' => 'Daycare']) }}"
+                        class="btn btn-secondary w-100 w-md-auto">CHECK REVIEWS</a>
+                    <a href="{{ auth()->check() ? route('workers.list', ['service_type' => 'Daycare']) : route('login') }}"
+                        class="btn btn-primary w-100 w-md-auto">
+                        BOOK NOW
+                    </a>
                 </div>
             </div>
         @elseif($service == 'carpentry')
@@ -96,8 +100,12 @@
                     the service.
                 </p>
                 <div class="mt-4 d-flex flex-column flex-md-row justify-content-between gap-3">
-                    <a href="#" class="btn btn-secondary w-100 w-md-auto">CHECK REVIEWS</a>
-                    <a href="#" class="btn btn-primary w-100 w-md-auto">BOOK NOW</a>
+                    <a href='{{ route('reviews.all-reviews', ['service_type' => 'Carpentry']) }}'
+                        class="btn btn-secondary w-100 w-md-auto">CHECK REVIEWS</a>
+                    <a href="{{ auth()->check() ? route('workers.list', ['service_type' => 'Carpentry']) : route('login') }}"
+                        class="btn btn-primary w-100 w-md-auto">
+                        BOOK NOW
+                    </a>
                 </div>
             </div>
         @elseif($service == 'electrical')
@@ -125,8 +133,12 @@
                 </p>
 
                 <div class="mt-4 d-flex flex-column flex-md-row justify-content-between gap-3">
-                    <a href="#" class="btn btn-secondary w-100 w-md-auto">CHECK REVIEWS</a>
-                    <a href="#" class="btn btn-primary w-100 w-md-auto">BOOK NOW</a>
+                    <a href='{{ route('reviews.all-reviews', ['service_type' => 'Electrician']) }}'
+                        class="btn btn-secondary w-100 w-md-auto">CHECK REVIEWS</a>
+                    <a href="{{ auth()->check() ? route('workers.list', ['service_type' => 'Electrician']) : route('login') }}"
+                        class="btn btn-primary w-100 w-md-auto">
+                        BOOK NOW
+                    </a>
                 </div>
             </div>
         @elseif($service == 'plumbing')
@@ -153,8 +165,12 @@
                 </p>
 
                 <div class="mt-4 d-flex flex-column flex-md-row justify-content-between gap-3">
-                    <a href="#" class="btn btn-secondary w-100 w-md-auto">CHECK REVIEWS</a>
-                    <a href="#" class="btn btn-primary w-100 w-md-auto">BOOK NOW</a>
+                    <a href='{{ route('reviews.all-reviews', ['service_type' => 'Plumbing']) }}'
+                        class="btn btn-secondary w-100 w-md-auto">CHECK REVIEWS</a>
+                    <a href="{{ auth()->check() ? route('workers.list', ['service_type' => 'Plumbing']) : route('login') }}"
+                        class="btn btn-primary w-100 w-md-auto">
+                        BOOK NOW
+                    </a>
                 </div>
             </div>
         @else
@@ -206,8 +222,12 @@
 
                     </div>
                     <div class="mt-4 d-flex flex-column flex-md-row justify-content-between gap-3">
-                        <a href="#" class="btn btn-secondary w-100 w-md-auto">CHECK REVIEWS</a>
-                        <a href="#" class="btn btn-primary w-100 w-md-auto">BOOK NOW</a>
+                        <a href='{{ route('reviews.all-reviews', ['service_type' => 'Home Cleaning']) }}'
+                            class="btn btn-secondary w-100 w-md-auto">CHECK REVIEWS</a>
+                        <a href="{{ auth()->check() ? route('workers.list', ['service_type' => 'Home Cleaning']) : route('login') }}"
+                            class="btn btn-primary w-100 w-md-auto">
+                            BOOK NOW
+                        </a>
                     </div>
                 </div>
             </div>
@@ -259,8 +279,12 @@
                         </ul>
                     </div>
                     <div class="mt-4 d-flex flex-column flex-md-row justify-content-between gap-3">
-                        <a href="#" class="btn btn-secondary w-100 w-md-auto">CHECK REVIEWS</a>
-                        <a href="#" class="btn btn-primary w-100 w-md-auto">BOOK NOW</a>
+                        <a href='{{ route('reviews.all-reviews', ['service_type' => 'Home Cleaning']) }}'
+                            class="btn btn-secondary w-100 w-md-auto">CHECK REVIEWS</a>
+                        <a href="{{ auth()->check() ? route('workers.list', ['service_type' => 'Home Cleaning']) : route('login') }}"
+                            class="btn btn-primary w-100 w-md-auto">
+                            BOOK NOW
+                        </a>
                     </div>
                 </div>
             </div>

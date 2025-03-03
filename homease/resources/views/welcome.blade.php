@@ -138,7 +138,11 @@
                                     <p class="text-gray-400 text-sm ml-2">/ session</p>
                                 </div>
                                 <div class="mt-4 flex space-x-4">
-                                    <button class="bg-gray-200 px-4 py-2 rounded-md">Check Reviews</button>
+                                    <button
+                                        onclick="window.location.href='{{ route('reviews.all-reviews', ['service_type' => 'Home Cleaning']) }}'"
+                                        class="bg-gray-200 px-4 py-2 rounded-md">
+                                        Check Reviews
+                                    </button>
                                     <a href="{{ route('login') }}"
                                         class="login-btn bg-blue-600 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-md font-semibold text-sm sm:text-base">
                                         <span>Book Now</span>
@@ -161,7 +165,12 @@
                                     <p class="text-gray-400 text-sm ml-2">/ hour</p>
                                 </div>
                                 <div class="mt-4 flex space-x-4">
-                                    <button class="bg-gray-200 px-4 py-2 rounded-md">Check Reviews</button>
+                                    <button
+                                        onclick="window.location.href='{{ route('reviews.all-reviews', ['service_type' => 'Daycare']) }}'"
+                                        class="bg-gray-200 px-4 py-2 rounded-md">
+                                        Check Reviews
+                                    </button>
+
                                     <a href="{{ route('login') }}"
                                         class="login-btn bg-blue-600 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-md font-semibold text-sm sm:text-base">
                                         <span>Book Now</span>
@@ -184,7 +193,12 @@
                                     <p class="text-gray-400 text-sm ml-2">/ session</p>
                                 </div>
                                 <div class="mt-4 flex space-x-4">
-                                    <button class="bg-gray-200 px-4 py-2 rounded-md">Check Reviews</button>
+                                    <button
+                                        onclick="window.location.href='{{ route('reviews.all-reviews', ['service_type' => 'Carpentry']) }}'"
+                                        class="bg-gray-200 px-4 py-2 rounded-md">
+                                        Check Reviews
+                                    </button>
+
                                     <a href="{{ route('login') }}"
                                         class="login-btn bg-blue-600 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-md font-semibold text-sm sm:text-base">
                                         <span>Book Now</span>
@@ -206,7 +220,12 @@
                                     <p class="text-gray-400 text-sm ml-2">/ session</p>
                                 </div>
                                 <div class="mt-4 flex space-x-4">
-                                    <button class="bg-gray-200 px-4 py-2 rounded-md">Check Reviews</button>
+                                    <button
+                                        onclick="window.location.href='{{ route('reviews.all-reviews', ['service_type' => 'Plumbing']) }}'"
+                                        class="bg-gray-200 px-4 py-2 rounded-md">
+                                        Check Reviews
+                                    </button>
+
                                     <a href="{{ route('login') }}"
                                         class="login-btn bg-blue-600 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-md font-semibold text-sm sm:text-base">
                                         <span>Book Now</span>
@@ -229,7 +248,11 @@
                                     <p class="text-gray-400 text-sm ml-2">/ session</p>
                                 </div>
                                 <div class="mt-4 flex space-x-4">
-                                    <button class="bg-gray-200 px-4 py-2 rounded-md">Check Reviews</button>
+                                    <button
+                                        onclick="window.location.href='{{ route('reviews.all-reviews', ['service_type' => 'Electrician']) }}'"
+                                        class="bg-gray-200 px-4 py-2 rounded-md">
+                                        Check Reviews
+                                    </button>
                                     <a href="{{ route('login') }}"
                                         class="login-btn bg-blue-600 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-md font-semibold text-sm sm:text-base">
                                         <span>Book Now</span>

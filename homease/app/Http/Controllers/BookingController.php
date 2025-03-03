@@ -132,6 +132,28 @@ class BookingController extends Controller
 
             Log::info('Formatted date:', ['scheduledDateTime' => $scheduledDateTime]);
 
+            // More flexible approach - checks if the requested time is within X hours of an existing booking
+            $bufferHours = 2; // Set this to how many hours of buffer you want between bookings
+            $conflictingBooking = Booking::where('worker_id', $request->worker_id)
+                ->where('status', 'ongoing')
+                ->where(function ($query) use ($scheduledDateTime, $bufferHours) {
+                    $requestedTime = Carbon::parse($scheduledDateTime);
+                    $lowerBound = $requestedTime->copy()->subHours($bufferHours);
+                    $upperBound = $requestedTime->copy()->addHours($bufferHours);
+
+                    $query->whereBetween('scheduled_date', [$lowerBound, $upperBound]);
+                })
+                ->first();
+
+            if ($conflictingBooking) {
+                $conflictTime = Carbon::parse($conflictingBooking->scheduled_date)->format('F d, Y h:i A');
+                return response()->json([
+                    'success' => false,
+                    'message' => "The worker has another booking at {$conflictTime}. Please select a time that's at least {$bufferHours} hours before or after.",
+                    'errors' => ['booking_date' => ['This time slot conflicts with an existing booking.']]
+                ], 422);
+            }
+
             // Create booking with NULL values for completion-related fields
             $booking = Booking::create([
                 'worker_id' => $request->worker_id,
