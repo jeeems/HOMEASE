@@ -12,9 +12,10 @@
                     <i class="far fa-calendar-alt me-1"></i>{{ now()->format('l, F d, Y') }}
                 </span>
                 <div>
-                    <button class="btn btn-outline-primary me-2 mb-2 mb-md-0 rounded-pill px-3">
+                    <a href="javascript:location.reload();"
+                        class="btn btn-outline-primary me-2 mb-2 mb-md-0 rounded-pill px-3">
                         <i class="fas fa-sync-alt me-1"></i> Refresh
-                    </button>
+                    </a>
                     <a href="{{ route('admin.bookings.create') }}" class="btn btn-primary rounded-pill px-3 shadow-sm">
                         <i class="fas fa-plus me-1"></i> New Booking
                     </a>
@@ -40,10 +41,6 @@
                                 class="list-group-item list-group-item-action border-0 d-flex align-items-center py-3 px-4">
                                 <i class="fas fa-calendar-check me-3"></i> Bookings
                             </a>
-                            <a href="{{ route('admin.services') }}"
-                                class="list-group-item list-group-item-action border-0 d-flex align-items-center py-3 px-4">
-                                <i class="fas fa-tools me-3"></i> Services
-                            </a>
                             <a href="{{ route('admin.ratings') }}"
                                 class="list-group-item list-group-item-action border-0 d-flex align-items-center py-3 px-4">
                                 <i class="fas fa-star me-3"></i> Ratings
@@ -51,10 +48,6 @@
                             <a href="{{ route('admin.reports') }}"
                                 class="list-group-item list-group-item-action border-0 d-flex align-items-center py-3 px-4">
                                 <i class="fas fa-chart-bar me-3"></i> Reports
-                            </a>
-                            <a href="{{ route('admin.settings') }}"
-                                class="list-group-item list-group-item-action border-0 d-flex align-items-center py-3 px-4">
-                                <i class="fas fa-cog me-3"></i> Settings
                             </a>
                         </div>
                     </div>
@@ -193,6 +186,7 @@
                     </div>
                 </div>
 
+                <!-- Here's my original booking table -->
                 <!-- Bookings Table -->
                 <div class="card border-0 shadow-sm mb-4 rounded-3 overflow-hidden">
                     <div
@@ -312,8 +306,8 @@
                                             </td>
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <div class="avatar me-2 bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center"
-                                                        style="width: 32px; height: 32px; font-size: 14px;">
+                                                    <div class="avatar me-2 bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
+                                                        style="width: 38px; height: 38px; font-size: 14px;">
                                                         @if ($booking->worker->profile->profile_picture)
                                                             <img src="{{ asset('storage/' . $booking->worker->profile->profile_picture) }}"
                                                                 alt="{{ $booking->worker->full_name }}"
@@ -435,20 +429,21 @@
                                                 <div class="d-flex align-items-center mb-2 mb-md-0">
                                                     <div class="avatar me-3 bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
                                                         style="width: 42px; height: 42px; font-size: 16px;">
-                                                        @if ($booking->client->profile->profile_picture)
-                                                            <img src="{{ asset('storage/' . $booking->client->profile->profile_picture) }}"
-                                                                alt="{{ $booking->client->full_name }}"
+                                                        @if ($rating->client->profile->profile_picture)
+                                                            <img src="{{ asset('storage/' . $rating->client->profile->profile_picture) }}"
+                                                                alt="{{ $rating->client->full_name }}"
                                                                 class="w-100 h-100 rounded-circle object-fit-cover">
                                                         @else
                                                             <span
                                                                 class="text-white bg-primary d-flex align-items-center justify-content-center w-100 h-100 rounded-circle">
-                                                                {{ substr($booking->client->full_name, 0, 1) }}
+                                                                {{ substr($rating->client->full_name, 0, 1) }}
                                                             </span>
                                                         @endif
                                                     </div>
                                                     <div>
                                                         <div class="fw-semibold">
-                                                            {{ $rating->client->full_name ?? 'Unknown User' }}</div>
+                                                            {{ $rating->client->full_name ?? 'Unknown User' }}
+                                                        </div>
                                                         <div class="small text-muted">
                                                             <i
                                                                 class="far fa-calendar-alt me-1"></i>{{ $rating->created_at->format('M d, Y') }}

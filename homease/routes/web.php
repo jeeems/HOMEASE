@@ -52,6 +52,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/bookings/{booking}/edit', [AdminController::class, 'editBooking'])->name('bookings.edit');
         Route::put('/bookings/{booking}/approve', [AdminController::class, 'approveBooking'])->name('bookings.approve');
         Route::put('/bookings/{booking}/cancel', [AdminController::class, 'cancelBooking'])->name('bookings.cancel');
+        Route::get('admin/bookings/ajax', [AdminController::class, 'ajaxBookings'])->name('admin.bookings.ajax');
 
         Route::get('/services', [AdminController::class, 'services'])->name('services');
         Route::get('/ratings', [AdminController::class, 'ratings'])->name('ratings');
@@ -59,6 +60,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/settings', [AdminController::class, 'settings'])->name('settings');
         Route::get('/workers', [AdminController::class, 'workers'])->name('workers');
         Route::get('/workers/{worker}', [AdminController::class, 'showWorker'])->name('workers.show');
+
+        Route::get('/users', [AdminController::class, 'users'])->name('users');
+        Route::get('/users/{user}', [AdminController::class, 'showUser'])->name('users.show');
     });
 });
 

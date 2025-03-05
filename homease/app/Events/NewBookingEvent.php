@@ -26,4 +26,10 @@ class NewBookingEvent implements ShouldBroadcast
     {
         return new Channel('bookings');
     }
+    public function broadcastWith()
+    {
+        return [
+            'booking' => $this->booking->toArray()
+        ];
+    }
 }

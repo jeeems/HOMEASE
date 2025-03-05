@@ -16,6 +16,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -90,8 +91,6 @@
                                     class="hidden absolute right-0 top-full w-48 bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200 z-50">
                                     <a href="{{ route('profile') }}"
                                         class="block px-4 py-2 text-gray-700 hover:bg-gray-100 no-underline">Profile</a>
-                                    <a href="{{ route('settings') }}"
-                                        class="block px-4 py-2 text-gray-700 hover:bg-gray-100 no-underline">Settings</a>
                                     <form action="{{ route('admin.logout') }}" method="POST" class="w-full">
                                         @csrf
                                         <button type="submit"
@@ -144,33 +143,15 @@
                     <li><a href="{{ route('admin.dashboard') }}"
                             class="block hover:text-blue-400 transition no-underline">Bookings</a></li>
                     <li><a href="{{ route('admin.dashboard') }}"
-                            class="block hover:text-blue-400 transition no-underline">Services</a></li>
-                    <li><a href="{{ route('admin.dashboard') }}"
                             class="block hover:text-blue-400 transition no-underline">Ratings</a></li>
                     <li><a href="{{ route('admin.dashboard') }}"
                             class="block hover:text-blue-400 transition no-underline">Reports</a></li>
-
                 </ul>
 
                 <!-- Bottom Actions -->
                 <div class="absolute bottom-6 left-0 w-full text-left">
                     <a href="{{ route('profile') }}"
                         class="block w-full px-4 py-3 text-blue-600 hover:bg-gray-100 no-underline">Profile</a>
-
-                    @if (Auth::check() && Auth::user()->role == 'worker')
-                        <div class="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-100 cursor-pointer "
-                            onclick="document.getElementById('mobileAvailabilityToggle').click()">
-                            <span class="text-blue-600">Availability</span>
-                            <label class="switch">
-                                <input type="checkbox" class="availability-toggle" id="mobileAvailabilityToggle"
-                                    {{ Auth::user()->workerAvailability->is_available ?? 0 ? 'checked' : '' }}>
-                                <span class="slider round"></span>
-                            </label>
-                        </div>
-                    @endif
-
-                    <a href="{{ route('settings') }}"
-                        class="block w-full px-4 py-3 text-blue-600 hover:bg-gray-100 no-underline">Settings</a>
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
                         <button type="submit"
