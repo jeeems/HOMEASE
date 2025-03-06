@@ -16,9 +16,9 @@
                         class="btn btn-outline-primary me-2 mb-2 mb-md-0 rounded-pill px-3">
                         <i class="fas fa-sync-alt me-1"></i> Refresh
                     </a>
-                    <a href="{{ route('admin.bookings.create') }}" class="btn btn-primary rounded-pill px-3 shadow-sm">
+                    {{-- <a href="{{ route('admin.bookings.create') }}" class="btn btn-primary rounded-pill px-3 shadow-sm">
                         <i class="fas fa-plus me-1"></i> New Booking
-                    </a>
+                    </a> --}}
                 </div>
             </div>
         </div>

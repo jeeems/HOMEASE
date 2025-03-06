@@ -15,11 +15,10 @@
                         <tr class="align-middle">
                             <td class="ps-4">
                                 <div class="d-flex align-items-center">
-                                    <div class="avatar me-3">
+                                    <div class="avatar me-3" style="width: 45px; height: 45px;">
                                         @if ($user->profile && $user->profile->profile_picture)
                                             <img src="{{ asset('storage/' . $user->profile->profile_picture) }}"
-                                                class="rounded-circle object-fit-cover"
-                                                style="width: 45px; height: 45px;">
+                                                class="w-8 h-8 md:w-10 md:h-10 rounded-full border border-gray-300">
                                         @else
                                             <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center"
                                                 style="width: 45px; height: 45px; font-size: 1.2rem;">

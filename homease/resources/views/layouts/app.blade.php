@@ -41,14 +41,16 @@
                 <div>
                     <a
                         href="
-                        @if (Auth::check()) @if (Auth::user()->role == 'worker')
-                                {{ route('worker.home') }}
-                            @else
-                                {{ route('home') }} @endif
+    @if (Auth::check()) @if (Auth::user()->role == 'worker')
+            {{ route('worker.home') }}
+        @elseif (Auth::user()->role == 'admin')
+            {{ route('admin.dashboard') }}
+        @else
+            {{ route('home') }} @endif
 @else
 {{ route('welcome') }}
-                        @endif
-                    ">
+    @endif
+">
                         <img src="{{ asset('assets/logo-and-icon/LOGO.png') }}" alt="HomEase Logo" class="h-10 w-auto">
                     </a>
                 </div>

@@ -320,67 +320,6 @@
 
             window.addEventListener("beforeunload", beforeUnloadHandler);
 
-            // Confirm submission and prevent "leave" warning when proceeding
-            // form.addEventListener("submit", function(event) {
-            //     event.preventDefault();
-
-            //     if (confirm("Are you sure you want to proceed with registration?")) {
-            //         isSubmitting = true;
-            //         window.removeEventListener("beforeunload", beforeUnloadHandler);
-
-            //         // Show loading overlay
-            //         document.getElementById('loadingOverlay').classList.remove('d-none');
-
-            //         const formData = new FormData(form);
-
-            //         fetch(form.action, {
-            //                 method: 'POST',
-            //                 body: formData,
-            //                 headers: {
-            //                     'Accept': 'application/json',
-            //                     'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
-            //                 },
-            //                 credentials: 'same-origin'
-            //             })
-            //             .then(response => response.json())
-            //             .then(data => {
-            //                 if (data.success) {
-            //                     // Successfully registered
-            //                     window.location.href = data.redirect;
-            //                 } else if (data.errors) {
-            //                     // Hide loading overlay
-            //                     document.getElementById('loadingOverlay').classList.add('d-none');
-
-            //                     // Clear previous errors
-            //                     document.querySelectorAll('.is-invalid').forEach(el => {
-            //                         el.classList.remove('is-invalid');
-            //                     });
-            //                     document.querySelectorAll('.invalid-feedback').forEach(el => {
-            //                         el.remove();
-            //                     });
-
-            //                     // Show new errors
-            //                     Object.keys(data.errors).forEach(key => {
-            //                         const input = form.querySelector(`[name="${key}"]`);
-            //                         if (input) {
-            //                             input.classList.add('is-invalid');
-            //                             const errorDiv = document.createElement('div');
-            //                             errorDiv.className = 'invalid-feedback';
-            //                             errorDiv.textContent = data.errors[key][0];
-            //                             input.parentNode.appendChild(errorDiv);
-            //                         }
-            //                     });
-            //                 }
-            //             })
-            //             .catch(error => {
-            //                 // Hide loading overlay
-            //                 document.getElementById('loadingOverlay').classList.add('d-none');
-            //                 console.error('Error:', error);
-            //                 alert('An error occurred during registration. Please try again.');
-            //             });
-            //     }
-            // });
-
             // Restore inputs on load
             restoreInputs([...step1Inputs, ...step2Inputs]);
             restoreRoleSelection();

@@ -52,6 +52,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/bookings/{booking}/edit', [AdminController::class, 'editBooking'])->name('bookings.edit');
         Route::put('/bookings/{booking}/approve', [AdminController::class, 'approveBooking'])->name('bookings.approve');
         Route::put('/bookings/{booking}/cancel', [AdminController::class, 'cancelBooking'])->name('bookings.cancel');
+        Route::put('/bookings/{booking}', [AdminController::class, 'updateBooking'])->name('bookings.update');
         Route::get('admin/bookings/ajax', [AdminController::class, 'ajaxBookings'])->name('admin.bookings.ajax');
 
         Route::get('/services', [AdminController::class, 'services'])->name('services');
@@ -61,8 +62,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/workers', [AdminController::class, 'workers'])->name('workers');
         Route::get('/workers/{worker}', [AdminController::class, 'showWorker'])->name('workers.show');
 
+
         Route::get('/users', [AdminController::class, 'users'])->name('users');
         Route::get('/users/{user}', [AdminController::class, 'showUser'])->name('users.show');
+        Route::post('/users/store', [AdminController::class, 'store'])->name('users.store');
     });
 });
 

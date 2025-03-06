@@ -138,13 +138,13 @@
                 <ul class="mt-6 space-y-4 text-lg text-left pl-4">
                     <li><a href="{{ route('admin.dashboard') }}"
                             class="block hover:text-blue-400 transition no-underline">Dashboard</a></li>
-                    <li><a href="{{ route('admin.dashboard') }}"
+                    <li><a href="{{ route('admin.users') }}"
                             class="block hover:text-blue-400 transition no-underline">Users</a></li>
-                    <li><a href="{{ route('admin.dashboard') }}"
+                    <li><a href="{{ route('admin.bookings') }}"
                             class="block hover:text-blue-400 transition no-underline">Bookings</a></li>
-                    <li><a href="{{ route('admin.dashboard') }}"
+                    <li><a href="{{ route('admin.ratings') }}"
                             class="block hover:text-blue-400 transition no-underline">Ratings</a></li>
-                    <li><a href="{{ route('admin.dashboard') }}"
+                    <li><a href="{{ route('admin.reports') }}"
                             class="block hover:text-blue-400 transition no-underline">Reports</a></li>
                 </ul>
 

@@ -16,9 +16,9 @@
                         class="btn btn-outline-primary me-2 mb-2 mb-md-0 rounded-pill px-3">
                         <i class="fas fa-sync-alt me-1"></i> Refresh
                     </a>
-                    <a href="{{ route('admin.bookings.create') }}" class="btn btn-primary rounded-pill px-3 shadow-sm">
+                    {{-- <a href="{{ route('admin.bookings.create') }}" class="btn btn-primary rounded-pill px-3 shadow-sm">
                         <i class="fas fa-plus me-1"></i> New Booking
-                    </a>
+                    </a> --}}
                 </div>
             </div>
         </div>
@@ -306,12 +306,12 @@
                                             </td>
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <div class="avatar me-2 bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
-                                                        style="width: 38px; height: 38px; font-size: 14px;">
+                                                    <div class="avatar me-3"
+                                                        style="width: 45px; height: 45px; font-size: 14px;">
                                                         @if ($booking->worker->profile->profile_picture)
                                                             <img src="{{ asset('storage/' . $booking->worker->profile->profile_picture) }}"
                                                                 alt="{{ $booking->worker->full_name }}"
-                                                                class="w-100 h-100 rounded-circle object-fit-cover">
+                                                                class="w-8 h-8 md:w-10 md:h-10 rounded-full border border-gray-300">
                                                         @else
                                                             <span
                                                                 class="text-white bg-primary d-flex align-items-center justify-content-center w-100 h-100 rounded-circle">

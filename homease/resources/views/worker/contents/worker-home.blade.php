@@ -105,8 +105,8 @@
 
                                             <div class="space-y-2 mb-4">
                                                 {{-- <div class="flex items-start text-sm text-gray-600">
-                                                    <i class="fas fa-tools mt-0.5 mr-2 w-4 text-gray-500"></i>
-                                                    <span>{{ $booking->service_type }}</span>
+                                                    <i class="fas fa-phone mt-0.5 mr-2 w-4 text-gray-500"></i>
+                                                    <span>{{ $booking->client->phone }}</span>
                                                 </div> --}}
 
                                                 <div class="flex items-start text-sm text-gray-600">
@@ -213,6 +213,15 @@
                                             </div>
 
                                             <div class="space-y-2 mb-4">
+
+                                                <div class="flex items-start text-sm text-gray-600">
+                                                    <i class="fas fa-phone mt-0.5 mr-2 w-4 text-gray-500"></i>
+                                                    <a href="sms:{{ $booking->client->phone }}"
+                                                        class="text-blue-600 hover:underline">
+                                                        {{ $booking->client->phone }}
+                                                    </a>
+                                                </div>
+
                                                 <div class="flex items-start text-sm text-gray-600">
                                                     <i class="far fa-calendar-alt mt-0.5 mr-2 w-4 text-gray-500"></i>
                                                     <div>

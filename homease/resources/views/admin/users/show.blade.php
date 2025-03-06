@@ -42,14 +42,14 @@
                         <h3 class="fw-bold mb-2">{{ $details->full_name }}</h3>
                         <p class="text-muted mb-4">{{ $details->email }}</p>
 
-                        <div class="d-flex justify-content-center gap-3">
+                        {{-- <div class="d-flex justify-content-center gap-3">
                             <a href="#" class="btn btn-outline-primary btn-lg rounded-circle shadow-sm">
                                 <i class="fas fa-edit"></i>
                             </a>
                             <a href="#" class="btn btn-outline-danger btn-lg rounded-circle shadow-sm">
                                 <i class="fas fa-trash-alt"></i>
                             </a>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
