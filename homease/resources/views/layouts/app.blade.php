@@ -75,7 +75,7 @@
                                     class="hover:text-blue-400 transition no-underline">Pricing</a></li>
                             <li><a href="{{ route('bookings.index') }}"
                                     class="hover:text-blue-400 transition no-underline">My Bookings</a></li>
-                            <li><a href="#" class="hover:text-blue-400 transition no-underline">About Us</a></li>
+                            {{-- <li><a href="#" class="hover:text-blue-400 transition no-underline">About Us</a></li> --}}
                         </ul>
                     </div>
                 @endif
@@ -208,7 +208,7 @@
                                 class="block hover:text-blue-400 transition no-underline">Pricing</a></li>
                         <li><a href="{{ route('bookings.index') }}"
                                 class="block hover:text-blue-400 transition no-underline">My Bookings</a></li>
-                        <li><a href="#" class="block hover:text-blue-400 transition no-underline">About Us</a>
+                        {{-- <li><a href="#" class="block hover:text-blue-400 transition no-underline">About Us</a> --}}
                         </li>
                     </ul>
                 @endif

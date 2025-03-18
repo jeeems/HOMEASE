@@ -57,7 +57,7 @@
                             </li>
                             <li><a href="{{ route('pricing') }}"
                                     class="hover:text-blue-400 transition no-underline">Pricing</a></li>
-                            <li><a href="#" class="hover:text-blue-400 transition no-underline">About Us</a></li>
+                            {{-- <li><a href="#" class="hover:text-blue-400 transition no-underline">About Us</a></li> --}}
                         </ul>
                     </div>
                 @endif

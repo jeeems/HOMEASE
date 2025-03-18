@@ -37,7 +37,7 @@
                     <li><a href="/" class="hover:text-blue-400 transition">Home</a></li>
                     <li><a href="#services" class="hover:text-blue-400 transition">Services</a></li>
                     <li><a href="{{ route('pricing') }}" class="hover:text-blue-400 transition">Pricing</a></li>
-                    <li><a href="#" class="hover:text-blue-400 transition">About Us</a></li>
+                    {{-- <li><a href="#" class="hover:text-blue-400 transition">About Us</a></li> --}}
                 </ul>
                 <div class="flex items-center space-x-4">
                     <a href="{{ route('login') }}"
@@ -59,7 +59,7 @@
                     <li><a href="{{ url('/') }}" class="hover:text-blue-400 transition">Home</a></li>
                     <li><a href="#services" class="hover:text-blue-400 transition">Services</a></li>
                     <li><a href="{{ route('pricing') }}" class="hover:text-blue-400 transition">Pricing</a></li>
-                    <li><a href="#" class="hover:text-blue-400 transition">About Us</a></li>
+                    {{-- <li><a href="#" class="hover:text-blue-400 transition">About Us</a></li> --}}
                 </ul>
             </div>
         </nav>
