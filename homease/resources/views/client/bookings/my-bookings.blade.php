@@ -386,8 +386,16 @@
 
                     <div class="mb-6">
                         <div class="flex items-start space-x-3 mb-6"> <!-- Changed items-center to items-start -->
-                            <img src="{{ asset('storage/' . $booking->worker->profile->profile_picture) }}"
-                                alt="Worker Profile" class="w-10 h-10 rounded-full border border-gray-300 mt-1">
+                            {{-- <img src="{{ asset('storage/' . $booking->worker->profile->profile_picture) }}"
+                                alt="Worker Profile" class="w-10 h-10 rounded-full border border-gray-300 mt-1"> --}}
+                                @if(isset($booking) && $booking->worker->profile->profile_picture)
+                                        <img src="{{ asset('storage/' . $booking->worker->profile->profile_picture) }}"
+                                            alt="Worker Profile" class="w-10 h-10 rounded-full border border-gray-300 mt-1">
+                                    @else
+                                        <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center mt-1">
+                                            <i class="fas fa-user text-gray-400"></i>
+                                        </div>
+                                    @endif
                             <!-- Added mt-1 -->
                             <div>
                                 <div class="text-sm text-gray-500">Worker</div>

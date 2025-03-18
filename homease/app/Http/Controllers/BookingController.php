@@ -26,15 +26,16 @@ class BookingController extends Controller
             ->orderBy('scheduled_date', 'desc')
             ->get();
 
-        // Check if there are bookings before querying workers
-        if ($bookings->isEmpty()) {
-            return redirect()->route('client.bookings.my-bookings')->with('error', 'No bookings found.');
+        // Initialize workers as an empty collection
+        $workers = collect();
+
+        // Only fetch workers if there are bookings
+        if (!$bookings->isEmpty()) {
+            $workerIds = $bookings->pluck('worker_id')->unique();
+            $workers = User::whereIn('id', $workerIds)->get()->keyBy('id');
         }
 
-        // Fetch workers associated with the bookings
-        $workerIds = $bookings->pluck('worker_id')->unique(); // Get unique worker IDs
-        $workers = User::whereIn('id', $workerIds)->get()->keyBy('id'); // Fetch workers and index by ID
-
+        // Pass bookings to the view, whether empty or not
         return view('client.bookings.my-bookings', compact('bookings', 'workers'));
     }
 
