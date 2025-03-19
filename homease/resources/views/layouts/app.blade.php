@@ -31,7 +31,13 @@
         <!-- Navbar -->
         @php
             $currentRoute = request()->route()->getName();
-            $isAuthPage = in_array($currentRoute, ['login', 'register.form', 'verification.notice', 'admin.login']);
+            $isAuthPage = in_array($currentRoute, [
+                'login',
+                'register.form',
+                'verification.notice',
+                'admin.login',
+                'verification.second',
+            ]);
         @endphp
 
         <nav

@@ -520,7 +520,7 @@
                                         <div class="d-flex align-items-center">
                                             <div class="avatar me-3 bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center"
                                                 style="width: 46px; height: 46px; font-size: 18px;">
-                                                @if ($worker->profile->profile_picture)
+                                                @if ($worker->profile && $worker->profile->profile_picture)
                                                 <img src="{{ asset('storage/' . $worker->profile->profile_picture) }}"
                                                     alt="{{ $worker->full_name }}"
                                                     class="w-100 h-100 rounded-circle object-fit-cover">
