@@ -187,7 +187,7 @@
                         <div class="d-flex align-items-center mb-3">
                             <div class="avatar me-3 bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
                                 style="width: 50px; height: 50px; font-size: 16px;">
-                                @if ($booking->client->profile->profile_picture)
+                                @if ($booking->client->profile && $booking->client->profile->profile_picture)
                                     <img src="{{ asset('storage/' . $booking->client->profile->profile_picture) }}"
                                         alt="{{ $booking->client->full_name }}"
                                         class="w-100 h-100 rounded-circle object-fit-cover">
