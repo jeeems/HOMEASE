@@ -95,22 +95,33 @@ class ProfileController extends Controller
                         if (File::exists($oldPicturePath)) {
                             File::delete($oldPicturePath);
                         }
+
+                        // Also delete from the second location
+                        $oldAppPicturePath = storage_path('app/public/' . $profile->profile_picture);
+                        if (File::exists($oldAppPicturePath)) {
+                            File::delete($oldAppPicturePath);
+                        }
                     }
 
                     $image = str_replace('data:image/png;base64,', '', $imageData);
                     $image = str_replace(' ', '+', $image);
                     $imageName = time() . '_' . $user->id . '.png';
 
-                    // Ensure directory exists
-                    $uploadPath = storage_path('app/public/profile_pictures/');
-                    if (!File::exists($uploadPath)) {
-                        File::makeDirectory($uploadPath, 0755, true);
+                    // Path 1: Save to storage/app/public/profile_pictures
+                    $uploadPath1 = storage_path('app/public/profile_pictures/');
+                    if (!File::exists($uploadPath1)) {
+                        File::makeDirectory($uploadPath1, 0755, true);
                     }
+                    File::put($uploadPath1 . $imageName, base64_decode($image));
 
-                    // Save new file
-                    File::put($uploadPath . $imageName, base64_decode($image));
+                    // Path 2: Save to public/storage/profile_pictures
+                    $uploadPath2 = public_path('storage/profile_pictures/');
+                    if (!File::exists($uploadPath2)) {
+                        File::makeDirectory($uploadPath2, 0755, true);
+                    }
+                    File::put($uploadPath2 . $imageName, base64_decode($image));
 
-                    // Update profile picture path
+                    // Update profile picture path (keep the original path format)
                     $profile->profile_picture = 'profile_pictures/' . $imageName;
                 }
             }

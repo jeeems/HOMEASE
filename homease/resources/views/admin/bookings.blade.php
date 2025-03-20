@@ -113,7 +113,7 @@
                                         <div class="d-flex align-items-center">
                                             <div class="avatar me-2 bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
                                                 style="width: 38px; height: 38px; font-size: 14px;">
-                                                @if ($booking->client->profile->profile_picture)
+                                                @if ($booking->client->profile && $booking->client->profile->profile_picture)
                                                     <img src="{{ asset('storage/' . $booking->client->profile->profile_picture) }}"
                                                         alt="{{ $booking->client->full_name }}"
                                                         class="w-100 h-100 rounded-circle object-fit-cover">
@@ -152,7 +152,7 @@
                                         <div class="d-flex align-items-center">
                                             <div class="avatar me-2 bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
                                                 style="width: 38px; height: 38px; font-size: 14px;">
-                                                @if ($booking->worker->profile->profile_picture)
+                                                @if ($booking->worker->profile && $booking->worker->profile->profile_picture)
                                                     <img src="{{ asset('storage/' . $booking->worker->profile->profile_picture) }}"
                                                         alt="{{ $booking->worker->full_name }}"
                                                         class="w-100 h-100 rounded-circle object-fit-cover">
