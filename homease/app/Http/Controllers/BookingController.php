@@ -56,7 +56,7 @@ class BookingController extends Controller
 
         // If completed, add completion details
         if ($request->status == 'completed') {
-            $booking->completion_date = Carbon::now();
+            $booking->completion_date = Carbon::now()->addHours(8);
 
             // If hours_worked and total_amount were provided from the form
             if ($request->has('hours_worked')) {
@@ -210,7 +210,7 @@ class BookingController extends Controller
 
         // Calculate hours worked (from scheduled time until now)
         $scheduledTime = Carbon::parse($booking->scheduled_date);
-        $completionTime = Carbon::now();
+        $completionTime = Carbon::now()->addHours(8);
 
         // Calculate difference in hours (round to nearest 0.25)
         $hoursWorked = $scheduledTime->diffInMinutes($completionTime) / 60;
@@ -224,7 +224,7 @@ class BookingController extends Controller
             'service_type' => $booking->service_type,
             'scheduled_date' => $scheduledTime->format('F d, Y h:i A'),
             'completion_time' => $completionTime->format('F d, Y h:i A'),
-            'hours_worked' => $hoursWorked,
+            'hours_worked' => $hoursWorked + 8,
             'hourly_rate' => number_format($hourlyRate, 2),
             'total_amount' => number_format($totalAmount, 2)
         ]);

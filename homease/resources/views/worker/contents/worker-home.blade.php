@@ -275,11 +275,22 @@
                                                     @method('PUT')
                                                     <input type="hidden" name="status" value="completed">
                                                     @php
-                                                        $now = \Carbon\Carbon::now(); // Get the current timestamp
+                                                        // Get current UTC time and add 8 hours for Manila time
+                                                        $now = \Carbon\Carbon::now()->addHours(8);
+
+                                                        // Parse scheduled time without timezone conversion
                                                         $scheduledTime = \Carbon\Carbon::parse(
                                                             $booking->scheduled_date,
-                                                        ); // Convert scheduled date to Carbon
-                                                        $isDisabled = $now->lessThan($scheduledTime); // Check if the current time is before the scheduled time
+                                                        );
+
+                                                        // Enable button when current time (with 8 hours added) is >= scheduled time
+                                                        $isDisabled = $now->lessThan($scheduledTime);
+
+                                                        // For debugging - you can temporarily uncomment these lines
+                                                        // echo "Current time (+8hrs): " . $now->format('Y-m-d H:i:s') . "<br>";
+                                                        // echo "Scheduled time: " . $scheduledTime->format('Y-m-d H:i:s') . "<br>";
+                                                        // echo "Is Disabled: " . ($isDisabled ? 'Yes' : 'No') . "<br>";
+
                                                     @endphp
 
                                                     <button type="submit"
@@ -1080,7 +1091,7 @@
                 case 'Home Cleaning':
                     return `HC-${paddedId}`;
                 case 'Plumbing':
-                    return `PLUMB-${paddedId}`; // Note: Fixed prefix from DC to PLUMB
+                    return `PLUMB-${paddedId}`;
                 case 'Carpentry':
                     return `CARP-${paddedId}`;
                 default:
@@ -1200,24 +1211,55 @@
                         const formattedBookingId = formatBookingId(data.booking_id || currentBooking.id,
                             data.service_type);
 
-                        // Parse the total amount for display and form submission
-                        // Remove commas from the total amount string and parse it as a number
-                        const rawTotalAmount = data.total_amount.replace(/,/g, '');
+                        // Handle the Manila timezone adjustment (UTC+8)
+                        // Add 8 hours to hours worked
+                        let hoursWorked = parseFloat(data.hours_worked) + 8;
+
+                        // Calculate the total amount based on the adjusted hours worked
+                        const hourlyRate = parseFloat(data.hourly_rate.replace(/,/g, ''));
+                        const totalAmount = hoursWorked * hourlyRate;
+
+                        // Format the total amount for display
+                        const formattedTotalAmount = totalAmount.toLocaleString('en-PH', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        });
+
+                        // Adjust end time by subtracting 8 hours
+                        let endTime = data.completion_time;
+                        try {
+                            // Parse the completion time string
+                            const completionDate = new Date(data.completion_time);
+                            // Subtract 8 hours
+                            completionDate.setHours(completionDate.getHours() + 8);
+                            // Format the adjusted date back to a string
+                            endTime = completionDate.toLocaleString('en-US', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                                hour: 'numeric',
+                                minute: 'numeric',
+                                hour12: true
+                            });
+                        } catch (e) {
+                            console.error('Error adjusting end time:', e);
+                            // If there's an error, keep the original completion time
+                        }
 
                         // Fill receipt data
                         document.getElementById('receipt-booking-id').textContent = formattedBookingId;
                         document.getElementById('receipt-service').textContent = data.service_type;
                         document.getElementById('receipt-start-time').textContent = data.scheduled_date;
-                        document.getElementById('receipt-end-time').textContent = data.completion_time;
-                        document.getElementById('receipt-hours').textContent = data.hours_worked +
-                            ' hrs';
+                        document.getElementById('receipt-end-time').textContent = endTime;
+                        document.getElementById('receipt-hours').textContent = hoursWorked + ' hrs';
                         document.getElementById('receipt-rate').textContent = '₱' + data.hourly_rate +
                             '/hr';
-                        document.getElementById('receipt-total').textContent = '₱' + data.total_amount;
+                        document.getElementById('receipt-total').textContent = '₱' +
+                            formattedTotalAmount;
 
                         // Set hidden form values - use the raw numeric value for the database
-                        document.getElementById('hours-worked-input').value = data.hours_worked;
-                        document.getElementById('total-amount-input').value = rawTotalAmount;
+                        document.getElementById('hours-worked-input').value = hoursWorked;
+                        document.getElementById('total-amount-input').value = totalAmount;
 
                         // Set form action using currentForm's action
                         document.getElementById('completionForm').action = currentForm.action;
@@ -1452,5 +1494,10 @@
             lightbox.appendChild(closeBtn);
             document.body.appendChild(lightbox);
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            document.cookie = `user_timezone=${timezone}; path=/; max-age=31536000`; // 1 year expiry
+        });
     </script>
 @endsection

@@ -31,8 +31,26 @@ class RatingController extends Controller
         $photos = [];
         if ($request->hasFile('review_photos')) {
             foreach ($request->file('review_photos') as $photo) {
-                $path = $photo->store('reviews', 'public');
-                $photos[] = $path;
+                // Generate a unique filename
+                $filename = time() . '_' . uniqid() . '.' . $photo->getClientOriginalExtension();
+
+                // Path 1: Save to storage/app/public/reviews
+                $path1 = storage_path('app/public/reviews');
+                if (!file_exists($path1)) {
+                    mkdir($path1, 0755, true);
+                }
+                $photo->move($path1, $filename);
+
+                // Path 2: Save to public/storage/reviews
+                $path2 = public_path('storage/reviews');
+                if (!file_exists($path2)) {
+                    mkdir($path2, 0755, true);
+                }
+                // Create a copy of the file in the second location
+                copy($path1 . '/' . $filename, $path2 . '/' . $filename);
+
+                // Store only the relative path in the database
+                $photos[] = 'reviews/' . $filename;
             }
         }
 
